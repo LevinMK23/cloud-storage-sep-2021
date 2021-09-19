@@ -8,9 +8,9 @@ import java.io.InputStream;
 
 public class IoIntro {
 
-    private static final byte [] buffer = new byte[1024];
-    private static final String APP_NAME = "server-sep-2021/";
-    private static final String ROOT_DIR = "server-sep-2021/root/";
+    private static final byte[] buffer = new byte[1024];
+    private static final String APP_NAME = "/GB cloud storage/Lesson_1/cloud-storage-sep-2021/server-sep-2021/";
+    private static final String ROOT_DIR = "/GB cloud storage/Lesson_1/cloud-storage-sep-2021/server-sep-2021/root/";
 
     private void createServerDir(String dirName) {
         File dir = new File(APP_NAME + dirName);
@@ -43,8 +43,9 @@ public class IoIntro {
         System.out.println(intro.readAsString("hello.txt"));
         intro.createServerDir("root");
         intro.transfer(
-                new File("/Users/mikelevin/IdeaProjects/gb/backend/test/cloud-storage-sep-2021/server-sep-2021/src/main/resources/com/geekbrains/io/hello.txt"),
-                new File(ROOT_DIR + "copy.txt")
+                new File("/GB cloud storage/Lesson_1/cloud-storage-sep-2021/server-sep-2021/src/main/resources/com/geekbrains/io/hello.txt"),
+                new File(ROOT_DIR + "copy2.txt")
+                //  D:\GB cloud storage\Lesson_1\cloud-storage-sep-2021
         );
     }
 }
