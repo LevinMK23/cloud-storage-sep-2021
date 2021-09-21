@@ -8,8 +8,13 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Server {
@@ -73,7 +78,22 @@ public class Server {
             buffer.clear();
         }
         String message = msg.toString();
-        channel.write(ByteBuffer.wrap(("[" + LocalDateTime.now() + "] " + message).getBytes(StandardCharsets.UTF_8)));
+        String[] words = message.split(" ");
+        if (message.equals("ls")) {
+            Path path = Paths.get("server-sep-2021", "root");
+            try (DirectoryStream<Path> files = Files.newDirectoryStream(path)) {
+                for (Path paths : files)
+                    channel.write(ByteBuffer.wrap((paths.toString() + "\n").getBytes(StandardCharsets.UTF_8)));
+            }
+        } else if (words[0].equals("cat")) {
+            Path path = Paths.get("server-sep-2021", "root", words[1]);
+            List<String> list = Files.readAllLines(path);
+            for (String str : list) {
+                channel.write(ByteBuffer.wrap((str + "\n").getBytes(StandardCharsets.UTF_8)));
+            }
+        } else {
+            System.out.println(message);
+        }
     }
 
     private void handleAccept(SelectionKey key) throws IOException {
