@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="server-sep-2021" />
         <module name="client-sep-2021" />
+        <module name="core-sep-2021" />
       </profile>
     </annotationProcessing>
   </component>
