@@ -28,11 +28,13 @@ public class Controller implements Initializable {
     public TextField input;
     private ObjectDecoderInputStream is;
     private ObjectEncoderOutputStream os;
+    private Net net;
 
     public void send(ActionEvent actionEvent) throws Exception {
         String fileName = input.getText();
-        input.clear();
-        sendFile(fileName);
+//        input.clear();
+//        sendFile(fileName);
+        net.sendMessage(fileName);
     }
 
     private void sendFile(String fileName) throws IOException {
@@ -43,29 +45,31 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            fillFilesInCurrentDir();
-            Socket socket = new Socket("localhost", 8189);
-            os = new ObjectEncoderOutputStream(socket.getOutputStream());
-            is = new ObjectDecoderInputStream(socket.getInputStream());
-            Thread daemon = new Thread(() -> {
-                try {
-                    while (true) {
-                        Command msg = (Command) is.readObject();
-                        // TODO: 23.09.2021 Разработка системы команд
-                        switch (msg.getType()) {
+        net = Net.getInstance(s -> Platform.runLater(() -> listView.getItems().add(s)));
 
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error("exception while read from input stream");
-                }
-            });
-            daemon.setDaemon(true);
-            daemon.start();
-        } catch (IOException ioException) {
-            log.error("e=", ioException);
-        }
+//        try {
+//            fillFilesInCurrentDir();
+//            Socket socket = new Socket("localhost", 8189);
+//            os = new ObjectEncoderOutputStream(socket.getOutputStream());
+//            is = new ObjectDecoderInputStream(socket.getInputStream());
+//            Thread daemon = new Thread(() -> {
+//                try {
+//                    while (true) {
+//                        Command msg = (Command) is.readObject();
+//                        // TODO: 23.09.2021 Разработка системы команд
+//                        switch (msg.getType()) {
+//
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    log.error("exception while read from input stream");
+//                }
+//            });
+//            daemon.setDaemon(true);
+//            daemon.start();
+//        } catch (IOException ioException) {
+//            log.error("e=", ioException);
+//        }
     }
 
     private void fillFilesInCurrentDir() throws IOException {

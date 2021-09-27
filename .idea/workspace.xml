@@ -5,25 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/EchoHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/Intro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringInboundHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringOutboundHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Callback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Foo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/root/1/Ok.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/root/copy.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +29,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -77,7 +70,7 @@
       <recent name="$PROJECT_DIR$/server-sep-2021/src/main/resources/com.geekbrains.io" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="Application.Test">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="client-sep-2021" />
@@ -111,19 +104,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="NioUtils" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.geekbrains.nio.NioUtils" />
-      <module name="server-sep-2021" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.geekbrains.nio.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Server (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.geekbrains.nio.Server" />
       <module name="server-sep-2021" />
@@ -137,26 +117,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.geekbrains.streamApi.Test" />
+      <module name="core-sep-2021" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.geekbrains.streamApi.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.App" />
         <item itemvalue="Application.NettyEchoServer" />
         <item itemvalue="Application.Server (1)" />
         <item itemvalue="Application.BufferTest" />
-        <item itemvalue="Application.NioUtils" />
       </list>
     </recent_temporary>
   </component>
@@ -174,7 +165,9 @@
       <workItem from="1631813520883" duration="4569000" />
       <workItem from="1631818252515" duration="629000" />
       <workItem from="1632157584209" duration="7623000" />
-      <workItem from="1632416830953" duration="6441000" />
+      <workItem from="1632416830953" duration="6933000" />
+      <workItem from="1632505985042" duration="17000" />
+      <workItem from="1632762515941" duration="5584000" />
     </task>
     <task id="LOCAL-00001" summary="Lesson 2. Nio">
       <created>1632164431188</created>
@@ -183,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1632164431188</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Lesson 3. Netty">
+      <created>1632423318747</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1632423318748</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,6 +191,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Lesson 2. Nio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lesson 2. Nio" />
+    <MESSAGE value="Lesson 3. Netty" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lesson 3. Netty" />
   </component>
 </project>

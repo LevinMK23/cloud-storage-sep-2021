@@ -35,9 +35,10 @@ public class NettyEchoServer {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
                             channel.pipeline().addLast(
-                                    new ObjectEncoder(),
-                                    new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                    new FileMessageHandler()
+                                    // todo
+                                    new StringDecoder(),
+                                    new StringEncoder(),
+                                    new EchoHandler()
                             );
                         }
                     })
