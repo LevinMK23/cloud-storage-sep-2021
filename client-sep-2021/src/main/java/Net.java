@@ -1,3 +1,4 @@
+import com.geekbrains.Command;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -5,6 +6,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +44,8 @@ public class Net {
                             protected void initChannel(SocketChannel c) throws Exception {
                                 channel = c;
                                 channel.pipeline().addLast(
-                                        new StringEncoder(),
-                                        new StringDecoder(),
+                                        new ObjectEncoder(),
+                                        new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                                         new ClientStringHandler(callback)
                                 );
                             }
@@ -60,8 +64,8 @@ public class Net {
         thread.start();
     }
 
-    public void sendMessage(String msg) {
-        channel.writeAndFlush(msg);
+    public void sendCommand(Command cmd) {
+        channel.writeAndFlush(cmd);
     }
 
 }
