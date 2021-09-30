@@ -4,26 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/EchoHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/Intro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringInboundHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringOutboundHandler.java" afterDir="false" />
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Выполнил работу по уроку, остался бак с перескакиванием на новую стоку, но работает. Закончу работу позже...">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/root/1/Ok.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/root/copy.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +23,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -46,7 +32,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1yEOwWJOBtzkhfhlPI7GomsQYVt" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -62,7 +50,10 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -78,6 +69,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.App">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="client-sep-2021" />
@@ -137,19 +141,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.App" />
@@ -188,6 +179,18 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Lesson 2. Nio" />

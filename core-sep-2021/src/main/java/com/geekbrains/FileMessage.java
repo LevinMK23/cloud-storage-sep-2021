@@ -14,6 +14,10 @@ public class FileMessage implements Serializable {
         name = path.getFileName().toString();
         bytes = Files.readAllBytes(path);
     }
+    public FileMessage(String fileName, byte[] sequence){
+        name = fileName;
+        bytes = sequence;
+    }
 
     public String getName() {
         return name;

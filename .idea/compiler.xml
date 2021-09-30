@@ -12,5 +12,8 @@
         <module name="core-sep-2021" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="core-sep-2021a" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
