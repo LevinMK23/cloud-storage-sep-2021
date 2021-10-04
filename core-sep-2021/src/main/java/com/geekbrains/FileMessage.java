@@ -14,21 +14,30 @@ public class FileMessage extends Command {
 
     private final byte[] bytes;
 
+    private boolean isFirstPart;
+
 
 
     public FileMessage(Path path) throws IOException {
+
         name = path.getFileName().toString();
         bytes= Files.readAllBytes(path);
         size = Files.size(path);
+        isFirstPart = true;
     }
-    public FileMessage(String name, byte[] bytes,long size) throws IOException {
+    public FileMessage(String name, byte[] bytes,long size,boolean isFirstPart) throws IOException {
         this.name = name;
         this.bytes= bytes;
+        this.size = size;
+        this.isFirstPart = isFirstPart;
     }
     public byte[] getBytes(){
         return bytes;
     }
 
+    public boolean isFirstPart() {
+        return isFirstPart;
+    }
 
     public String getName() {
         return name;

@@ -53,14 +53,17 @@ public class Controller implements Initializable {
         byte[] fileData =  Files.readAllBytes(file);
         ByteBuffer buffer = ByteBuffer.wrap(fileData);
         if(fileSize<= filesPartsSize){
-            System.out.println(file.toString());
+
             net.sendFile(new FileMessage(file));
 
         }else {
             int count = 0;
+            boolean firstPart = true;
             while (buffer.hasRemaining()){
-                net.sendFile(new FileMessage(fileName+"_"+count,buffer.get(new byte[(int)filesPartsSize]).array(),fileSize));
+
+                net.sendFile(new FileMessage(fileName,buffer.get(new byte[(int)filesPartsSize]).array(),fileSize,firstPart));
                 count++;
+                firstPart=false;
             }
         }
 
@@ -70,7 +73,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //net = Net.getInstance(s -> Platform.runLater(() -> listView.getItems().add(s)));
+        net = Net.getInstance(s -> Platform.runLater(() -> listView.getItems().add(s.toString())));
         //тут написать то что прилетает от сервака при старте клиента ( лист респонс)
 
         try {

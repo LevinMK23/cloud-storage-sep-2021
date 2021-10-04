@@ -4,22 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Выполнил работу по уроку, остался бак с перескакиванием на новую стоку, но работает. Закончу работу позже...">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Callback.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Callback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/EchoHandler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringInboundHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringOutboundHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/BufferTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/BufferTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/NioUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/NioUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,7 +179,14 @@
       <option name="project" value="LOCAL" />
       <updated>1632164431188</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception">
+      <created>1633339341394</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1633339341394</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,6 +218,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Lesson 2. Nio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lesson 2. Nio" />
+    <MESSAGE value="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception" />
+    <option name="LAST_COMMIT_MESSAGE" value="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception" />
   </component>
 </project>

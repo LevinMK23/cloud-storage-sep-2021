@@ -28,9 +28,13 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
         switch (cmd.getType()) {
             case FILE_MESSAGE:
                 FileMessage inMsg = (FileMessage) cmd;
-                if(inMsg.getName().endsWith("_0")){
-                    Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes());//тут может быть ошибка
+                if(inMsg.isFirstPart()){
+                    System.out.println(cmd.toString());
+                    System.out.println(inMsg.getName());
+                    Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);//тут может быть ошибка
                 }else {
+
+                    System.out.println(inMsg.getName());
                     Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
                 }
                 break;
