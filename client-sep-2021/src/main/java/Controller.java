@@ -1,88 +1,161 @@
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import com.geekbrains.Command;
-import com.geekbrains.FileMessage;
+import com.geekbrains.*;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
 public class Controller implements Initializable {
 
-    private static String ROOT_DIR = "client-sep-2021/root";
-    private static byte[] buffer = new byte[1024];
-    public ListView<String> listView;
+    private static Path currentDir = Paths.get("client-sep-2021", "root");
+    public ListView<String> fileClientView;
+    public ListView<String> fileServerView;
     public TextField input;
-    private ObjectDecoderInputStream is;
-    private ObjectEncoderOutputStream os;
+    public TextField currentDirectoryOnClient;
+    public TextField currentDirectoryOnServer;
     private Net net;
 
-    public void send(ActionEvent actionEvent) throws Exception {
+
+    public void sendFile(ActionEvent actionEvent) throws IOException {
         String fileName = input.getText();
-//        input.clear();
-//        sendFile(fileName);
-        net.sendMessage(fileName);
+        input.clear();
+        Path file = Paths.get(String.valueOf(currentDir.resolve(fileName)));
+        net.sendCommand(new FileMessage(file));
     }
 
-    private void sendFile(String fileName) throws IOException {
-        Path file = Paths.get(ROOT_DIR, fileName);
-        os.writeObject(new FileMessage(file));
-        os.flush();
+    public void receiveArrayFiles(ActionEvent actionEvent) {
+
+        net.sendCommand(new ListRequest());
     }
+
+    public void updateArrayFiles(ActionEvent actionEvent) throws IOException {
+        refreshClientView();
+    }
+
+    public void receiveFile(ActionEvent actionEvent) {
+        String fileName = input.getText();
+        input.clear();
+        Path file = Paths.get(fileName);
+        net.sendCommand(new FileRequest(file));
+    }
+
+    public void clientPathUp(ActionEvent actionEvent) throws IOException {
+        currentDir = currentDir.getParent();
+        currentDirectoryOnClient.setText(currentDir.toString());
+        refreshClientView();
+    }
+
+    public void serverPathUp(ActionEvent actionEvent) {
+        net.sendCommand(new PathUpRequest());
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        net = Net.getInstance(s -> Platform.runLater(() -> listView.getItems().add(s)));
 
-//        try {
-//            fillFilesInCurrentDir();
-//            Socket socket = new Socket("localhost", 8189);
-//            os = new ObjectEncoderOutputStream(socket.getOutputStream());
-//            is = new ObjectDecoderInputStream(socket.getInputStream());
-//            Thread daemon = new Thread(() -> {
-//                try {
-//                    while (true) {
-//                        Command msg = (Command) is.readObject();
-//                        // TODO: 23.09.2021 Разработка системы команд
-//                        switch (msg.getType()) {
-//
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    log.error("exception while read from input stream");
-//                }
-//            });
-//            daemon.setDaemon(true);
-//            daemon.start();
-//        } catch (IOException ioException) {
-//            log.error("e=", ioException);
-//        }
+        //показываем список файлов на клиенте
+        try {
+            currentDirectoryOnClient.setText(currentDir.toString());
+            refreshClientView();
+            addNavigationListener();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        net = Net.getInstance(cmd -> {
+                    switch (cmd.getType()) {
+                        case LIST_RESPONSE:
+                            ListResponse listResponse = (ListResponse) cmd;
+                            refreshServerView(listResponse.getList());
+                            break;
+                        case FILE_MESSAGE:
+                            FileMessage fileMessage = (FileMessage) cmd;
+                            Files.write(
+                                    currentDir.resolve(fileMessage.getName()),
+                                    fileMessage.getBytes()
+                            );
+                            refreshClientView();
+                            break;
+                        case PATH_RESPONSE:
+                            PathResponse pathResponse = (PathResponse) cmd;
+                            currentDirectoryOnServer.setText(pathResponse.getPath());
+                            break;
+                        default:
+                            log.error("Incorrect server response: " + cmd.getType());
+                    }
+                }
+        );
     }
 
-    private void fillFilesInCurrentDir() throws IOException {
-        listView.getItems().clear();
-        listView.getItems().addAll(
-                Files.list(Paths.get(ROOT_DIR))
-                    .map(p -> p.getFileName().toString())
-                    .collect(Collectors.toList())
-        );
-        listView.setOnMouseClicked(e -> {
+    private void refreshServerView(List<String> names) {
+        fileServerView.getItems().clear();
+        fileServerView.getItems().addAll(names);
+    }
+
+
+    private void refreshClientView() throws IOException {
+        fileClientView.getItems().clear();
+        List<String> names = Files.list(currentDir)
+                .map(p -> p.getFileName().toString())
+                .collect(Collectors.toList());
+        fileClientView.getItems().addAll(names);
+
+        fileClientView.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                String item = listView.getSelectionModel().getSelectedItem();
+                String item = fileClientView.getSelectionModel().getSelectedItem();
                 input.setText(item);
+            }
+        });
+
+        fileServerView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = fileServerView.getSelectionModel().getSelectedItem();
+                input.setText(item);
+            }
+        });
+
+
+    }
+
+    public void addNavigationListener() {
+        fileClientView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = fileClientView.getSelectionModel().getSelectedItem();
+                Path newPath = currentDir.resolve(item);
+                if (Files.isDirectory(newPath)) {
+                    currentDir = newPath;
+                    try {
+                        refreshClientView();
+                        currentDirectoryOnClient.setText(currentDir.toString());
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+        });
+        fileServerView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = fileServerView.getSelectionModel().getSelectedItem();
+                net.sendCommand(new PathInRequest(item));
+
             }
         });
     }

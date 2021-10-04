@@ -1,7 +1,5 @@
 package com.geekbrains.netty;
 
-import java.util.logging.FileHandler;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -12,12 +10,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
 
-// send string
-// receive string
 @Slf4j
 public class NettyEchoServer {
 
@@ -35,10 +29,9 @@ public class NettyEchoServer {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
                             channel.pipeline().addLast(
-                                    // todo
-                                    new StringDecoder(),
-                                    new StringEncoder(),
-                                    new EchoHandler()
+                                    new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                                    new ObjectEncoder(),
+                                    new FileMessageHandler()
                             );
                         }
                     })
