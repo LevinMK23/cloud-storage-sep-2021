@@ -105,6 +105,22 @@ public class Controller implements Initializable {
         );
     }
 
+    private String resolveFileType(Path path) {
+        if (Files.isDirectory(path)) {
+            return "[Dir]" + " " + path.getFileName().toString();
+        } else {
+            return "[File]" + " " + path.getFileName().toString();
+        }
+    }
+    public static String returnName_2(String str){
+        String[] words = str.split(" ");
+        return words[1];
+    }
+    public static String returnName_1(String str){
+        String[] words = str.split(" ");
+        return words[0];
+    }
+
     private void refreshServerView(List<String> names) {
         fileServerView.getItems().clear();
         fileServerView.getItems().addAll(names);
@@ -114,49 +130,53 @@ public class Controller implements Initializable {
     private void refreshClientView() throws IOException {
         fileClientView.getItems().clear();
         List<String> names = Files.list(currentDir)
-                .map(p -> p.getFileName().toString())
+//                .map(p -> p.getFileName().toString())
+                .map(this::resolveFileType)
                 .collect(Collectors.toList());
         fileClientView.getItems().addAll(names);
-
-        fileClientView.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
-                String item = fileClientView.getSelectionModel().getSelectedItem();
-                input.setText(item);
-            }
-        });
-
-        fileServerView.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
-                String item = fileServerView.getSelectionModel().getSelectedItem();
-                input.setText(item);
-            }
-        });
-
-
     }
 
     public void addNavigationListener() {
         fileClientView.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                String item = fileClientView.getSelectionModel().getSelectedItem();
+                String item = returnName_2(fileClientView.getSelectionModel().getSelectedItem());
                 Path newPath = currentDir.resolve(item);
                 if (Files.isDirectory(newPath)) {
                     currentDir = newPath;
+
                     try {
                         refreshClientView();
                         currentDirectoryOnClient.setText(currentDir.toString());
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
-                }
+                } else {input.setText(item);}
             }
         });
         fileServerView.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
-                String item = fileServerView.getSelectionModel().getSelectedItem();
-                net.sendCommand(new PathInRequest(item));
 
+            if (e.getClickCount() == 2) {
+                String item = returnName_2(fileServerView.getSelectionModel().getSelectedItem());
+                if (returnName_1(fileServerView.getSelectionModel().getSelectedItem()).equals("[Dir]")) {
+                    net.sendCommand(new PathInRequest(item));
+                }else {
+                    input.setText(item);
+                }
             }
         });
+//        fileClientView.setOnMouseClicked(e -> {
+//            if (e.getClickCount() == 1) {
+//                String item = returnName(fileClientView.getSelectionModel().getSelectedItem());
+//                input.setText(item);
+//                log.debug("Output the file name to input ");
+//            }
+//        });
+//        fileServerView.setOnMouseClicked(e -> {
+//            if (e.getClickCount() == 1) {
+//                String item = returnName(fileServerView.getSelectionModel().getSelectedItem());
+//                input.setText(item);
+//                log.debug("Output the file name to input ");
+//            }
+//        });
     }
 }

@@ -15,9 +15,18 @@ public class ListResponse extends Command {
 
     public ListResponse(Path path) throws IOException {
         list = Files.list(path)
-                .map(p->p.getFileName().toString())
+//                .map(p->p.getFileName().toString())
+                .map(this::resolveFileType)
                 .collect(Collectors.toList());
 
+    }
+
+    private String resolveFileType(Path path) {
+        if (Files.isDirectory(path)) {
+            return "[Dir]" + " " + path.getFileName().toString();
+        } else {
+            return "[File]" + " " + path.getFileName().toString();
+        }
     }
     public List<String> getList() {
         return list;

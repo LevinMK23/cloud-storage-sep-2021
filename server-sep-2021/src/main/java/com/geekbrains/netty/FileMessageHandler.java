@@ -1,10 +1,5 @@
 package com.geekbrains.netty;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,9 +27,9 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.debug("Client connected!");
         log.debug("Send list of files and current directory to the client");
-        //Получаем список файлов в текущей папке на сервере
+        //Отправляем список файлов в текущей папке на сервере
         ctx.writeAndFlush(new ListResponse(currentPath));
-        //todo отправить текущую директорию на сервере
+        //Отправляем текущую дирректорию
         ctx.writeAndFlush(new PathResponse(currentPath.toString()));
     }
 
@@ -67,6 +62,8 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
             case PATH_UP_REQUEST:
                 if (currentPath.getParent()!=null){ //todo подумать над логикой, если будет авторизация пользователя
+                    //todo завести переменную, за которую нельзы выходить при регистрации и сравнивать при запросе
+                    // этой команды
                     currentPath = currentPath.getParent();
                 }
                 log.debug("Send list of files and current directory to the client");
@@ -88,15 +85,5 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 log.debug("Invalid command {}",cmd.getType());
                 break;
         }
-
-
     }
-//    //Получить список файлов в папке на сервере
-//    private static ListResponse createFileList (String str) throws IOException {
-//        File dir = new File(String.valueOf(str));
-//        File[] arrFiles = dir.listFiles();
-//        List<File> list = Arrays.asList(arrFiles);
-//        ListResponse listResponse = new ListResponse(list);
-//        return listResponse;
-//    }
 }
