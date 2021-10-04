@@ -18,11 +18,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
-    private static final Path ROOT = Paths.get("server-sep-2021", "root");
+    private static Path currentPath;
+
+    public FileMessageHandler() throws IOException {
+        currentPath= Paths.get("server-sep-2021", "root");//todo добавить к пути username
+        if (!Files.exists(currentPath)){
+            Files.createDirectory(currentPath);
+        }
+    }
+
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.debug("Client connected!");
+        log.debug("Send list of files and current directory to the client");
+        //Получаем список файлов в текущей папке на сервере
+        ctx.writeAndFlush(new ListResponse(currentPath));
+        //todo отправить текущую директорию на сервере
+        ctx.writeAndFlush(new PathResponse(currentPath.toString()));
     }
 
     @Override
@@ -32,25 +45,44 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
             case FILE_MESSAGE:
                 FileMessage fileMessage = (FileMessage) cmd;
                 Files.write(
-                        ROOT.resolve(fileMessage.getName()),
+                        currentPath.resolve(fileMessage.getName()),
                         fileMessage.getBytes()
                 );
-                ctx.writeAndFlush(createFileList(ROOT.toString()));
+                ctx.writeAndFlush(new ListResponse(currentPath));
                 log.debug("Received a file {} from the client",fileMessage.getName());
-                break;
-
-            case LIST_REQUEST:
-                ctx.writeAndFlush(createFileList(ROOT.toString()));
-                log.debug("Send list of files to the client");
                 break;
 
             case FILE_REQUEST:
                 FileRequest fileRequest = (FileRequest) cmd;
                 String fileName = fileRequest.getName();
-                Path file = Paths.get(String.valueOf(ROOT), fileName);
+                Path file = Paths.get(String.valueOf(currentPath), fileName);
                 ctx.writeAndFlush(new FileMessage(file));
                 log.debug("Send file {} to the client",fileName);
                 break;
+
+            case LIST_REQUEST:
+                ctx.writeAndFlush(new ListResponse(currentPath));
+                log.debug("Send list of files to the client");
+                break;
+
+            case PATH_UP_REQUEST:
+                if (currentPath.getParent()!=null){ //todo подумать над логикой, если будет авторизация пользователя
+                    currentPath = currentPath.getParent();
+                }
+                log.debug("Send list of files and current directory to the client");
+                ctx.writeAndFlush(new ListResponse(currentPath));
+                ctx.writeAndFlush(new PathResponse(currentPath.toString()));
+                break;
+
+            case PATH_IN_REQUEST:
+                PathInRequest request = (PathInRequest) cmd;
+                Path newPAth = currentPath.resolve(request.getDir());
+                if(Files.isDirectory(newPAth)){
+                    currentPath = newPAth;
+                    log.debug("Send list of files and current directory to the client");
+                    ctx.writeAndFlush(new ListResponse(currentPath));
+                    ctx.writeAndFlush(new PathResponse(currentPath.toString()));
+                }
 
             default:
                 log.debug("Invalid command {}",cmd.getType());
@@ -59,12 +91,12 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
 
     }
-    //Получить список файлов в папке на сервере
-    private static ListResponse createFileList (String str){
-        File dir = new File(String.valueOf(str));
-        File[] arrFiles = dir.listFiles();
-        List<File> list = Arrays.asList(arrFiles);
-        ListResponse listResponse = new ListResponse(list);
-        return listResponse;
-    }
+//    //Получить список файлов в папке на сервере
+//    private static ListResponse createFileList (String str) throws IOException {
+//        File dir = new File(String.valueOf(str));
+//        File[] arrFiles = dir.listFiles();
+//        List<File> list = Arrays.asList(arrFiles);
+//        ListResponse listResponse = new ListResponse(list);
+//        return listResponse;
+//    }
 }

@@ -25,32 +25,46 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Controller implements Initializable {
 
-    private static final Path ROOT_DIR = Paths.get("client-sep-2021","root");
-    public ListView<String> listView;
+    private static Path currentDir = Paths.get("client-sep-2021", "root");
+    public ListView<String> fileClientView;
+    public ListView<String> fileServerView;
     public TextField input;
-    public ListView<String> listView1;
+    public TextField currentDirectoryOnClient;
+    public TextField currentDirectoryOnServer;
     private Net net;
 
 
     public void sendFile(ActionEvent actionEvent) throws IOException {
         String fileName = input.getText();
         input.clear();
-        Path file = Paths.get(String.valueOf(ROOT_DIR), fileName);
+        Path file = Paths.get(String.valueOf(currentDir.resolve(fileName)));
         net.sendCommand(new FileMessage(file));
     }
+
     public void receiveArrayFiles(ActionEvent actionEvent) {
 
         net.sendCommand(new ListRequest());
     }
+
     public void updateArrayFiles(ActionEvent actionEvent) throws IOException {
-        fillFilesInCurrentDir();
+        refreshClientView();
     }
 
-    public void receiveFile(ActionEvent actionEvent){
+    public void receiveFile(ActionEvent actionEvent) {
         String fileName = input.getText();
         input.clear();
         Path file = Paths.get(fileName);
         net.sendCommand(new FileRequest(file));
+    }
+
+    public void clientPathUp(ActionEvent actionEvent) throws IOException {
+        currentDir = currentDir.getParent();
+        currentDirectoryOnClient.setText(currentDir.toString());
+        refreshClientView();
+    }
+
+    public void serverPathUp(ActionEvent actionEvent) {
+        net.sendCommand(new PathUpRequest());
     }
 
 
@@ -59,7 +73,9 @@ public class Controller implements Initializable {
 
         //показываем список файлов на клиенте
         try {
-            fillFilesInCurrentDir();
+            currentDirectoryOnClient.setText(currentDir.toString());
+            refreshClientView();
+            addNavigationListener();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,65 +83,80 @@ public class Controller implements Initializable {
         net = Net.getInstance(cmd -> {
                     switch (cmd.getType()) {
                         case LIST_RESPONSE:
-                            listView1.getItems().clear();
                             ListResponse listResponse = (ListResponse) cmd;
-                            List<File> list = listResponse.getList();
-                            for (File file : list) {
-                                listView1.getItems().add(file.getName());
-                                System.out.println(file.getName());
-                            }
+                            refreshServerView(listResponse.getList());
                             break;
                         case FILE_MESSAGE:
                             FileMessage fileMessage = (FileMessage) cmd;
                             Files.write(
-                                    ROOT_DIR.resolve(fileMessage.getName()),
+                                    currentDir.resolve(fileMessage.getName()),
                                     fileMessage.getBytes()
                             );
-                            fillFilesInCurrentDir();
+                            refreshClientView();
                             break;
+                        case PATH_RESPONSE:
+                            PathResponse pathResponse = (PathResponse) cmd;
+                            currentDirectoryOnServer.setText(pathResponse.getPath());
+                            break;
+                        default:
+                            log.error("Incorrect server response: " + cmd.getType());
                     }
                 }
         );
-
-        //отправляем запрос списка файлов на сервере и отображаем его
-        //  net.sendCommand(new ListRequest());  //todo не работает, приложение падает
     }
 
-    private void fillFilesInCurrentDir() throws IOException {
-        listView.getItems().clear();
-        listView.getItems().addAll(
-                Files.list(Paths.get(String.valueOf(ROOT_DIR)))
-                        .map(p -> p.getFileName().toString())
-                        .collect(Collectors.toList())
-        );
+    private void refreshServerView(List<String> names) {
+        fileServerView.getItems().clear();
+        fileServerView.getItems().addAll(names);
+    }
 
-        listView.setOnMouseClicked(e -> {
+
+    private void refreshClientView() throws IOException {
+        fileClientView.getItems().clear();
+        List<String> names = Files.list(currentDir)
+                .map(p -> p.getFileName().toString())
+                .collect(Collectors.toList());
+        fileClientView.getItems().addAll(names);
+
+        fileClientView.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                String item = listView.getSelectionModel().getSelectedItem();
+                String item = fileClientView.getSelectionModel().getSelectedItem();
                 input.setText(item);
             }
         });
 
-        listView1.setOnMouseClicked(e -> {
+        fileServerView.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                String item = listView1.getSelectionModel().getSelectedItem();
+                String item = fileServerView.getSelectionModel().getSelectedItem();
                 input.setText(item);
             }
         });
 
+
     }
 
+    public void addNavigationListener() {
+        fileClientView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = fileClientView.getSelectionModel().getSelectedItem();
+                Path newPath = currentDir.resolve(item);
+                if (Files.isDirectory(newPath)) {
+                    currentDir = newPath;
+                    try {
+                        refreshClientView();
+                        currentDirectoryOnClient.setText(currentDir.toString());
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+        });
+        fileServerView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = fileServerView.getSelectionModel().getSelectedItem();
+                net.sendCommand(new PathInRequest(item));
 
-
-
-
-
-
-
-
-
-
-
-
-
+            }
+        });
+    }
 }
