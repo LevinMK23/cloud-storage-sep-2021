@@ -76,5 +76,6 @@ public class NioUtils {
 
         Files.walk(path)
                 .forEach(System.out::println);
+
     }
 }
