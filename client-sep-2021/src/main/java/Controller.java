@@ -3,6 +3,7 @@ import java.io.RandomAccessFile;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,8 +12,15 @@ import java.util.stream.Collectors;
 
 import com.geekbrains.Command;
 import com.geekbrains.FileMessage;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.DefaultFileRegion;
+import io.netty.channel.FileRegion;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
+import io.netty.handler.ssl.SslHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,16 +31,18 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 
 
+
 @Slf4j
 public class Controller implements Initializable {
 
     private static String ROOT_DIR = "client-sep-2021/root";
     private static byte[] buffer = new byte[1024];
-    private final long filesPartsSize = 10000000;
+    private final long filesPartsSize = 1000000;
 
     public ListView<String> listView;
     public TextField input;
     private Net net;
+
 
 
     public void send(ActionEvent actionEvent) throws Exception {
@@ -50,21 +60,54 @@ public class Controller implements Initializable {
         Path file = Paths.get(ROOT_DIR, fileName);// тут сделать текущую директорию
         long fileSize = Files.size(file);
 
-        byte[] fileData =  Files.readAllBytes(file);
-        ByteBuffer buffer = ByteBuffer.wrap(fileData);
-        if(fileSize<= filesPartsSize){
 
+
+        if(fileSize<= filesPartsSize){
+            byte[] fileData =  Files.readAllBytes(file);
             net.sendFile(new FileMessage(file));
 
         }else {
-            int count = 0;
-            boolean firstPart = true;
-            while (buffer.hasRemaining()){
 
-                net.sendFile(new FileMessage(fileName,buffer.get(new byte[(int)filesPartsSize]).array(),fileSize,firstPart));
-                count++;
-                firstPart=false;
+            try(RandomAccessFile raf = new RandomAccessFile(file.toFile(),"r")){
+                long skip = 0;
+                boolean isFirstPart = true;
+                byte[] bytes = new byte[(int)filesPartsSize];
+
+                System.out.println(fileSize);
+
+                    while (skip<fileSize){
+
+                        if(skip + filesPartsSize > fileSize){
+                            bytes= new byte[(int)(fileSize-skip)];
+
+                            raf.read(bytes);
+                            System.out.println(new String(bytes));
+                            net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
+                            skip+= fileSize-skip;
+                        }else {
+                            System.out.println(skip);
+                            bytes = new byte[(int)filesPartsSize];
+                            raf.read(bytes);
+                            System.out.println(new String(bytes));
+
+                            Net.getInstance(System.out::println).sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
+
+
+                            skip += filesPartsSize;
+                        }
+                        isFirstPart=false;
+
+                    }
+
+
+
+
+
+            }catch (Exception e){
+                log.error("raf error ", e);
             }
+
+
         }
 
 

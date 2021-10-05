@@ -69,8 +69,10 @@ public class Net {
 
     public void sendFile(FileMessage fileMessage) {
         channel.writeAndFlush(fileMessage);
+        channel.flush();
 
     }
+
     // send command here "channel.write...
 
 }
