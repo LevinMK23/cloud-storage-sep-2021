@@ -81,14 +81,14 @@ public class Controller implements Initializable {
                             bytes= new byte[(int)(fileSize-skip)];
 
                             raf.read(bytes);
-                            System.out.println(new String(bytes));
+
                             net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
                             skip+= fileSize-skip;
                         }else {
-                            System.out.println(skip);
+
                             bytes = new byte[(int)filesPartsSize];
                             raf.read(bytes);
-                            System.out.println(new String(bytes));
+
 
                             Net.getInstance(System.out::println).sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
 
