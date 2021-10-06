@@ -1,3 +1,4 @@
+import com.geekbrains.FileMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -5,8 +6,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,9 +42,10 @@ public class Net {
                             protected void initChannel(SocketChannel c) throws Exception {
                                 channel = c;
                                 channel.pipeline().addLast(
-                                        new StringEncoder(),
-                                        new StringDecoder(),
-                                        new ClientStringHandler(callback)
+                                        new ObjectEncoder(),
+                                        new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                                        new ClientFileMessageHandler(callback)
+
                                 );
                             }
                         });
@@ -63,5 +66,13 @@ public class Net {
     public void sendMessage(String msg) {
         channel.writeAndFlush(msg);
     }
+
+    public void sendFile(FileMessage fileMessage) {
+        channel.writeAndFlush(fileMessage);
+        channel.flush();
+
+    }
+
+    // send command here "channel.write...
 
 }

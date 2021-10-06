@@ -11,6 +11,7 @@ public class BufferTest {
         buffer.put((byte) 'a');
         buffer.put((byte) 'b');
         buffer.put((byte) 'c');
+        buffer.capacity();
 
         buffer.flip();
         while (buffer.hasRemaining()) {

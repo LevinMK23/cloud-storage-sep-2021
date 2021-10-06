@@ -1,15 +1,19 @@
 package com.geekbrains.netty;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 import com.geekbrains.Command;
+import com.geekbrains.FileMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import static com.geekbrains.CommandType.FILE_MESSAGE;
 
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("server-sep-2021", "root");
+    private static final byte[] bytes = new byte[64000000];
+
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Command cmd) throws Exception {
@@ -20,8 +24,27 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 //        );
 //
 //        ctx.writeAndFlush("OK");
+        // тут пишу в контекст
         switch (cmd.getType()) {
+            case FILE_MESSAGE:
+                FileMessage inMsg = (FileMessage) cmd;
+                if(inMsg.isFirstPart()){
 
+                    Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);//тут может быть ошибка
+
+                }else {
+
+
+                    Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
+
+                }
+                break;
+            case LIST_REQUEST:
+                break;
+            case PATH_REQUEST:
+                break;
+            case MOVE_REQUEST:
+                break;
         }
 
     }
