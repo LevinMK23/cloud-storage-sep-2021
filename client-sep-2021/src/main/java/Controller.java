@@ -21,6 +21,7 @@ import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,19 +67,22 @@ public class Controller implements Initializable {
             byte[] fileData =  Files.readAllBytes(file);
             net.sendFile(new FileMessage(file));
 
+
         }else {
 
             try(RandomAccessFile raf = new RandomAccessFile(file.toFile(),"r")){
                 long skip = 0;
                 boolean isFirstPart = true;
-                byte[] bytes = new byte[(int)filesPartsSize];
+
 
                 System.out.println(fileSize);
 
                     while (skip<fileSize){
 
+
+
                         if(skip + filesPartsSize > fileSize){
-                            bytes= new byte[(int)(fileSize-skip)];
+                            byte[] bytes= new byte[(int)(fileSize-skip)];
 
                             raf.read(bytes);
 
@@ -86,11 +90,11 @@ public class Controller implements Initializable {
                             skip+= fileSize-skip;
                         }else {
 
-                            bytes = new byte[(int)filesPartsSize];
+                            byte[] bytes = new byte[(int)filesPartsSize];
                             raf.read(bytes);
 
 
-                            Net.getInstance(System.out::println).sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
+                            net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
 
 
                             skip += filesPartsSize;

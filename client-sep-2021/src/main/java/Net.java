@@ -72,7 +72,9 @@ public class Net {
         channel.flush();
 
     }
-
+    public  SocketChannel getCannel(){
+        return channel;
+    }
     // send command here "channel.write...
 
 }
