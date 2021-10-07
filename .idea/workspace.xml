@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Callback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Foo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data.txt" afterDir="false" />
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Удалил ссауты для дебага">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,16 +22,22 @@
       <list>
         <option value="FxmlFile" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="project2" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1yEOwWJOBtzkhfhlPI7GomsQYVt" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -50,12 +48,15 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/client-sep-2021/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -70,7 +71,20 @@
       <recent name="$PROJECT_DIR$/server-sep-2021/src/main/resources/com.geekbrains.io" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Test">
+  <component name="RunManager" selected="Application.App">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="client-sep-2021" />
@@ -104,6 +118,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="NioUtils" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.geekbrains.nio.NioUtils" />
+      <module name="server-sep-2021" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.geekbrains.nio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Server (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.geekbrains.nio.Server" />
       <module name="server-sep-2021" />
@@ -117,37 +144,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.geekbrains.streamApi.Test" />
-      <module name="core-sep-2021" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.geekbrains.streamApi.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Test" />
         <item itemvalue="Application.App" />
         <item itemvalue="Application.NettyEchoServer" />
         <item itemvalue="Application.Server (1)" />
         <item itemvalue="Application.BufferTest" />
+        <item itemvalue="Application.NioUtils" />
       </list>
     </recent_temporary>
   </component>
@@ -165,9 +168,7 @@
       <workItem from="1631813520883" duration="4569000" />
       <workItem from="1631818252515" duration="629000" />
       <workItem from="1632157584209" duration="7623000" />
-      <workItem from="1632416830953" duration="6933000" />
-      <workItem from="1632505985042" duration="17000" />
-      <workItem from="1632762515941" duration="5584000" />
+      <workItem from="1632416830953" duration="6441000" />
     </task>
     <task id="LOCAL-00001" summary="Lesson 2. Nio">
       <created>1632164431188</created>
@@ -176,22 +177,81 @@
       <option name="project" value="LOCAL" />
       <updated>1632164431188</updated>
     </task>
-    <task id="LOCAL-00002" summary="Lesson 3. Netty">
-      <created>1632423318747</created>
+    <task id="LOCAL-00002" summary="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception">
+      <created>1633339341394</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1632423318748</updated>
+      <updated>1633339341394</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="исправлены ошибки, теперь файл передаётся на сервер">
+      <created>1633353644014</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1633353644014</updated>
+    </task>
+    <task id="LOCAL-00004" summary="проблема передачи больших файлов решена, но потрачена куча памяти... Решение требует доработки.">
+      <created>1633471275080</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1633471275080</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Удалил ссауты для дебага">
+      <created>1633471434020</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1633471434020</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="project_1_big_file_problem" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Lesson 2. Nio" />
-    <MESSAGE value="Lesson 3. Netty" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lesson 3. Netty" />
+    <MESSAGE value="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception" />
+    <MESSAGE value="исправлены ошибки, теперь файл передаётся на сервер" />
+    <MESSAGE value="проблема передачи больших файлов решена, но потрачена куча памяти... Решение требует доработки." />
+    <MESSAGE value="Удалил ссауты для дебага" />
+    <option name="LAST_COMMIT_MESSAGE" value="Удалил ссауты для дебага" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java</url>
+          <line>112</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

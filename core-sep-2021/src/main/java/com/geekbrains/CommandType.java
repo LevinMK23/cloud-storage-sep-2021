@@ -6,5 +6,8 @@ public enum CommandType {
     LIST_REQUEST,
     LIST_RESPONSE,
     PATH_REQUEST,
-    PATH_RESPONSE
+    PATH_RESPONSE,
+    MOVE_REQUEST,
+    MOVE_RESPONSE
+
 }
