@@ -1,4 +1,6 @@
+import com.geekbrains.Command;
 import com.geekbrains.FileMessage;
+import com.geekbrains.LoginRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -44,7 +46,7 @@ public class Net {
                                 channel.pipeline().addLast(
                                         new ObjectEncoder(),
                                         new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                        new ClientFileMessageHandler(callback)
+                                        new ClientFileMessageHandler()
 
                                 );
                             }
@@ -67,11 +69,12 @@ public class Net {
         channel.writeAndFlush(msg);
     }
 
-    public void sendFile(FileMessage fileMessage) {
-        channel.writeAndFlush(fileMessage);
-        channel.flush();
+    public void sendFile(Command command) {
+        channel.writeAndFlush(command);
+
 
     }
+
     public  SocketChannel getCannel(){
         return channel;
     }

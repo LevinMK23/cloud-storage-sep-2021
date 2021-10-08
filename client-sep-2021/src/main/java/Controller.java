@@ -1,28 +1,13 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.net.Socket;
 import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import com.geekbrains.Command;
 import com.geekbrains.FileMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.DefaultFileRegion;
-import io.netty.channel.FileRegion;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
-import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
-import io.netty.handler.ssl.SslHandler;
-import io.netty.handler.stream.ChunkedWriteHandler;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -120,7 +105,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        net = Net.getInstance(s -> Platform.runLater(() -> listView.getItems().add(s.toString())));
+        net = Net.getInstance(s -> log.debug("client started"));
         //тут написать то что прилетает от сервака при старте клиента ( лист респонс)
 
         try {
@@ -128,6 +113,7 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             log.error("files are not awaliable",e);
         }
+
 
 //        try {
 //            fillFilesInCurrentDir();

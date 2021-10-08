@@ -12,7 +12,8 @@ import static com.geekbrains.CommandType.FILE_MESSAGE;
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("server-sep-2021", "root");
-    private static final byte[] bytes = new byte[64000000];
+
+
 
 
     @Override
@@ -40,6 +41,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 }
                 break;
             case LIST_REQUEST:
+
                 break;
             case PATH_REQUEST:
                 break;
