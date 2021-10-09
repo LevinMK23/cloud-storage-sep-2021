@@ -34,12 +34,12 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
                 ResultSet resultSet = SQLHandler.getUserFromDb(loginCommand.getLogin(),loginCommand.getPass());
                 if(resultSet.wasNull()) {
-                    ctx.write(new LoginResponse(false));
-                    return;
+                    ctx.writeAndFlush(new LoginResponse(false));
+
                 }else {
-                    ctx.write(new LoginResponse(true));
+                    ctx.writeAndFlush(new LoginResponse(true));
                     isLogin = true;
-                    return;
+
                 }
 
             }else if(cmd.getType().equals(CommandType.REGISTRATION_REQUEST)){
