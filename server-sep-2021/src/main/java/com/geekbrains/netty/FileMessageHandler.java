@@ -47,12 +47,12 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 SQLHandler.createNewUser(reg.getUserName(),reg.getPass());
                 ctx.write(new LoginResponse(true));
                 isLogin = true;
-                return;
+
 
 
             }else{
                 ctx.write(new LoginResponse(false));
-                return;
+
             }
 
         }else {
