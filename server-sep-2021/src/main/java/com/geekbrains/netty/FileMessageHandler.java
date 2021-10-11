@@ -63,7 +63,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
         }else {
             System.out.println("перед свич кейс");
             switch (cmd.getType()) {
-                case FILE_MESSAGE:
+                case FILE_MESSAGE:// посмотреть возможность замены моей логики на chunked file на клиентскую и серверную сторону
                     FileMessage inMsg = (FileMessage) cmd;
                     if(inMsg.isFirstPart()){
 
