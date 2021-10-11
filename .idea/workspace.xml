@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Теперь, добавлен переход к новому окну после ответа от сервера. Клиент готов, осталось написать базовые фенкции.">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Добавлена проверка на уникальность логина">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -254,7 +256,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633965033077</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Добавлена проверка на уникальность логина">
+      <created>1633969292953</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1633969292953</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -294,6 +303,7 @@
     <MESSAGE value="добавлены сцены авторизации и регистрации, а также классы для их функционирования." />
     <MESSAGE value="Добавлена база данных MySQL, отлажена пара функций" />
     <MESSAGE value="Теперь, добавлен переход к новому окну после ответа от сервера. Клиент готов, осталось написать базовые фенкции." />
-    <option name="LAST_COMMIT_MESSAGE" value="Теперь, добавлен переход к новому окну после ответа от сервера. Клиент готов, осталось написать базовые фенкции." />
+    <MESSAGE value="Добавлена проверка на уникальность логина" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлена проверка на уникальность логина" />
   </component>
 </project>

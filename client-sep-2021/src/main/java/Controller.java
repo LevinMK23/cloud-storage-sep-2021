@@ -115,29 +115,7 @@ public class Controller implements Initializable {
         }
 
 
-//        try {
-//            fillFilesInCurrentDir();
-//            Socket socket = new Socket("localhost", 8189);
-//            os = new ObjectEncoderOutputStream(socket.getOutputStream());
-//            is = new ObjectDecoderInputStream(socket.getInputStream());
-//            Thread daemon = new Thread(() -> {
-//                try {
-//                    while (true) {
-//                        Command msg = (Command) is.readObject();
-//                        // TODO: 23.09.2021 Разработка системы команд
-//                        switch (msg.getType()) {
-//
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    log.error("exception while read from input stream");
-//                }
-//            });
-//            daemon.setDaemon(true);
-//            daemon.start();
-//        } catch (IOException ioException) {
-//            log.error("e=", ioException);
-//        }
+
     }
 
     private void fillFilesInCurrentDir() throws IOException {

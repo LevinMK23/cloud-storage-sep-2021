@@ -2,19 +2,18 @@ package com.geekbrains.netty;
 
 import java.nio.file.*;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.geekbrains.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import javax.sound.midi.Soundbank;
-
-import static com.geekbrains.CommandType.FILE_MESSAGE;
-
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("server-sep-2021", "root");
     private Path currentPath = null;
+    private String user;
     private boolean isLogin = false;
 
 
@@ -49,6 +48,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 if(SQLHandler.createNewUser(reg.getUserName(),reg.getPass())){
                     ctx.write(new LoginResponse(true,reg.getUserName()));
                     currentPath = ROOT.resolve(reg.getUserName());
+                    user=reg.getUserName();
                     isLogin = true;
                 }else ctx.write(new LoginResponse(false,""));
 
@@ -67,21 +67,27 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     FileMessage inMsg = (FileMessage) cmd;
                     if(inMsg.isFirstPart()){
 
-                        Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);//тут может быть ошибка
+                        Files.write(currentPath.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);//тут может быть ошибка
 
                     }else {
 
 
-                        Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
+                        Files.write(currentPath.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
 
                     }
                     break;
                 case LIST_REQUEST:
 
+
+                    ctx.writeAndFlush(new ListResponse(currentPath,user));
                     break;
-                case PATH_REQUEST:
-                    break;
-                case MOVE_REQUEST:
+
+                case CD_REQUEST:
+                    CdRequest cdRequest = (CdRequest)cmd;
+                    Path newPath = currentPath.resolve(cdRequest.getDir());
+                    if(!Files.exists(newPath)) Files.createDirectory(newPath);
+                    newPath = currentPath;
+                    ctx.writeAndFlush(new CdResponse(newPath));
                     break;
             }
         }
