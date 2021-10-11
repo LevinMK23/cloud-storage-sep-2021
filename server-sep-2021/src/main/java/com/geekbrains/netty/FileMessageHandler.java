@@ -26,7 +26,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
     protected void channelRead0(ChannelHandlerContext ctx, Command cmd) throws Exception {
 
         // TODO: 23.09.2021 Разработка системы команд
-        System.out.println("перед вайл");
+        System.out.println("перед блоком аутентификации");
         if (!isLogin){
 
             if(cmd.getType().equals(CommandType.LOGIN_REQUEST)){
@@ -34,10 +34,11 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
                 ResultSet resultSet = SQLHandler.getUserFromDb(loginCommand.getLogin(),loginCommand.getPass());
                 if(resultSet==null) {
-                    ctx.writeAndFlush(new LoginResponse(false));
+                    ctx.writeAndFlush(new LoginResponse(false,""));
+
 
                 }else {
-                    ctx.writeAndFlush(new LoginResponse(true));
+                    ctx.writeAndFlush(new LoginResponse(true,loginCommand.getLogin()));
                     currentPath = ROOT.resolve(loginCommand.getLogin());
                     isLogin = true;
 
@@ -45,15 +46,17 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
             }else if(cmd.getType().equals(CommandType.REGISTRATION_REQUEST)){
                 RegistrationRequest reg = (RegistrationRequest) cmd;
-                SQLHandler.createNewUser(reg.getUserName(),reg.getPass());
-                ctx.write(new LoginResponse(true));
-                currentPath = ROOT.resolve(reg.getUserName());
-                isLogin = true;
+                if(SQLHandler.createNewUser(reg.getUserName(),reg.getPass())){
+                    ctx.write(new LoginResponse(true,reg.getUserName()));
+                    currentPath = ROOT.resolve(reg.getUserName());
+                    isLogin = true;
+                }else ctx.write(new LoginResponse(false,""));
+
 
 
 
             }else{
-                ctx.write(new LoginResponse(false));
+                ctx.write(new LoginResponse(false,""));
 
             }
 
