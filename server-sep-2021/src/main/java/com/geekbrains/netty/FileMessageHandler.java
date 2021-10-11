@@ -33,11 +33,12 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 LoginRequest loginCommand = (LoginRequest) cmd;
 
                 ResultSet resultSet = SQLHandler.getUserFromDb(loginCommand.getLogin(),loginCommand.getPass());
-                if(resultSet.wasNull()) {
+                if(resultSet==null) {
                     ctx.writeAndFlush(new LoginResponse(false));
 
                 }else {
                     ctx.writeAndFlush(new LoginResponse(true));
+                    currentPath = ROOT.resolve(loginCommand.getLogin());
                     isLogin = true;
 
                 }
@@ -46,6 +47,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 RegistrationRequest reg = (RegistrationRequest) cmd;
                 SQLHandler.createNewUser(reg.getUserName(),reg.getPass());
                 ctx.write(new LoginResponse(true));
+                currentPath = ROOT.resolve(reg.getUserName());
                 isLogin = true;
 
 

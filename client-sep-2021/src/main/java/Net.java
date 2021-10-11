@@ -1,6 +1,4 @@
 import com.geekbrains.Command;
-import com.geekbrains.FileMessage;
-import com.geekbrains.LoginRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -46,7 +44,7 @@ public class Net {
                                 channel.pipeline().addLast(
                                         new ObjectEncoder(),
                                         new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                        new ClientFileMessageHandler()
+                                        new ClientFileMessageHandler(callback)
 
                                 );
                             }
