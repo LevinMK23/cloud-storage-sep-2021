@@ -21,7 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Controller implements Initializable {
 
-    private static Path currentDir = Paths.get("client-sep-2021", "root");
+//    private static Path currentDir = Paths.get("client-sep-2021", "root");
+    private static Path currentDir = Paths.get("D:\\GB cloud storage\\Lesson_1\\cloud-storage-sep-2021\\server-sep-2021", "root");
     public ListView<String> fileClientView;
     public ListView<String> fileServerView;
     public TextField input;
@@ -132,7 +133,31 @@ public class Controller implements Initializable {
 
     public String returnName2(String str) {
         String[] words = str.split(" ");
-        return words[1];
+        String returnWay;
+        switch (words.length) {
+            case 2:
+                returnWay = words[1];
+                break;
+            case 3:
+                returnWay = words[1] + " " + words[2];
+                break;
+            case 4:
+                returnWay = words[1] + " " + words[2] + " " + words[3];
+                break;
+            default:
+                returnWay = words[1];
+                break;
+                //todo поменять на решение с циклом
+//        String returnWay = words[1];
+//        if (words.length > 2) {
+//            for (int i = 3; i < (words.length + 1); i++) {
+//                returnWay = returnWay + " " + words[i];
+//            }
+//            System.out.println(returnWay);
+//        }
+
+        }
+        return returnWay;
     }
 
     public String returnName1(String str) {

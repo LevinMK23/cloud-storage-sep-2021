@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="680.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
-   <AnchorPane fx:id="mainScene" layoutY="61.0" prefHeight="619.0" prefWidth="624.0">
+   <AnchorPane fx:id="mainScene" layoutY="61.0" prefHeight="619.0" prefWidth="624.0" visible="false">
           <ListView fx:id="fileClientView" layoutX="14.0" layoutY="45.0" prefHeight="402.0" prefWidth="301.0" />
           <TextField fx:id="input" layoutX="232.0" layoutY="461.0" prefHeight="65.0" prefWidth="391.0" />
          <Button fx:id="Button1" layoutX="14.0" layoutY="499.0" mnemonicParsing="false" onAction="#sendFile" prefHeight="25.0" prefWidth="192.0" text="Отправить файл на сервер &gt;&gt;&gt;" />

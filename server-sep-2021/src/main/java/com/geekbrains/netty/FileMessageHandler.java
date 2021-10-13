@@ -69,10 +69,10 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 if (Files.isDirectory(newPAth)) {
                     currentPath = newPAth;
                     log.debug("Send list of files and current directory to the client");
-                    System.out.println(clientPath);
-                    System.out.println(currentPath);
                     ctx.writeAndFlush(new ListResponse(currentPath));
                     ctx.writeAndFlush(new PathResponse(currentPath.toString()));
+                } else {
+                    log.debug("{} is not a directory",request);
                 }
             case AUTH_REQUEST:
                 AuthRequest authRequest = (AuthRequest) cmd;
@@ -81,7 +81,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 AuthResponse authResponse = new AuthResponse();
                 if (service.findByLogin(login).equals(password)) {
                     authResponse.setAuthStatus(true);
-                    clientPath = Paths.get("server-sep-2021", login);
+                    clientPath = Paths.get("D:\\GB cloud storage\\Lesson_1\\cloud-storage-sep-2021\\server-sep-2021", login);
                     if (!Files.exists(clientPath)) {
                         Files.createDirectory(clientPath);
                     }

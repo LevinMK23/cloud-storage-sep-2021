@@ -4,34 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Добавлен функционал перемещения между папками на клиенте и сервере">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Добавлен функционал проверки логина и пароля через БД, создание папки для каждого пользователя, ограничение перемещения по папкам пользователя на сервере">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/root/1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/root/target.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/FileRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/FileRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Foo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/streamApi/Foo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/streamApi/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/core-sep-2021-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/core-sep-2021-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/Handler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/IoIntro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/BufferTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/NioUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Test.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +198,7 @@
       <workItem from="1633419147439" duration="1578000" />
       <workItem from="1633429927682" duration="21000" />
       <workItem from="1634110486249" duration="696000" />
-      <workItem from="1634111212582" duration="26382000" />
+      <workItem from="1634111212582" duration="35003000" />
     </task>
     <task id="LOCAL-00001" summary="Lesson 2. Nio">
       <created>1632164431188</created>
@@ -240,7 +228,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633355960114</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Добавлен функционал проверки логина и пароля через БД, создание папки для каждого пользователя, ограничение перемещения по папкам пользователя на сервере">
+      <created>1634139365161</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1634139365161</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,6 +270,7 @@
     <MESSAGE value="Lesson 3. Netty" />
     <MESSAGE value="Добавлен функционал передачи файла на сервер, получения файла с сервера, отображения списка файлов на клиенте, отображения списка файлов на сервере" />
     <MESSAGE value="Добавлен функционал перемещения между папками на клиенте и сервере" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлен функционал перемещения между папками на клиенте и сервере" />
+    <MESSAGE value="Добавлен функционал проверки логина и пароля через БД, создание папки для каждого пользователя, ограничение перемещения по папкам пользователя на сервере" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлен функционал проверки логина и пароля через БД, создание папки для каждого пользователя, ограничение перемещения по папкам пользователя на сервере" />
   </component>
 </project>
