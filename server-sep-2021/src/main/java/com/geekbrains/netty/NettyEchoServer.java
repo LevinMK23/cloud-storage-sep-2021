@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class NettyEchoServer {
-
     public NettyEchoServer() {
 
         EventLoopGroup auth = new NioEventLoopGroup(1);
@@ -22,7 +21,6 @@ public class NettyEchoServer {
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
-
             ChannelFuture channelFuture = bootstrap.group(auth, worker)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -50,5 +48,4 @@ public class NettyEchoServer {
     public static void main(String[] args) {
         new NettyEchoServer();
     }
-
 }

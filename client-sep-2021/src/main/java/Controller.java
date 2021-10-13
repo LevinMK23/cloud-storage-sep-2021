@@ -1,6 +1,5 @@
-import java.io.File;
+
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,15 +9,12 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import com.geekbrains.*;
-import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
-import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import lombok.SneakyThrows;
+import javafx.scene.layout.AnchorPane;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -31,8 +27,21 @@ public class Controller implements Initializable {
     public TextField input;
     public TextField currentDirectoryOnClient;
     public TextField currentDirectoryOnServer;
+    public AnchorPane mainScene;
+
+    public TextField loginField;
+    public TextField passwordField;
+    public Button Authorization;
+
     private Net net;
 
+    public void sendLoginAndPassword(ActionEvent actionEvent) {
+        String login = loginField.getText();
+        String password = passwordField.getText();
+        loginField.clear();
+        passwordField.clear();
+        net.sendCommand(new AuthRequest(login, password));
+    }
 
     public void sendFile(ActionEvent actionEvent) throws IOException {
         String fileName = input.getText();
@@ -42,7 +51,6 @@ public class Controller implements Initializable {
     }
 
     public void receiveArrayFiles(ActionEvent actionEvent) {
-
         net.sendCommand(new ListRequest());
     }
 
@@ -67,11 +75,8 @@ public class Controller implements Initializable {
         net.sendCommand(new PathUpRequest());
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        //показываем список файлов на клиенте
         try {
             currentDirectoryOnClient.setText(currentDir.toString());
             refreshClientView();
@@ -79,7 +84,6 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         net = Net.getInstance(cmd -> {
                     switch (cmd.getType()) {
                         case LIST_RESPONSE:
@@ -98,13 +102,26 @@ public class Controller implements Initializable {
                             PathResponse pathResponse = (PathResponse) cmd;
                             currentDirectoryOnServer.setText(pathResponse.getPath());
                             break;
+                        case AUTH_RESPONSE:
+                            AuthResponse authResponse = (AuthResponse) cmd;
+                            log.debug("AuthResponse {}", authResponse.getAuthStatus());
+                            if (authResponse.getAuthStatus()) {
+                                mainScene.setVisible(true);
+                                loginField.setVisible(false);
+                                passwordField.setVisible(false);
+                                Authorization.setVisible(false);
+                                net.sendCommand(new ListRequest());
+                            } else {
+                                //todo Warning
+                            }
+
+                            break;
                         default:
-                            log.error("Incorrect server response: " + cmd.getType());
+                            log.debug("Invalid command {}", cmd.getType());
                     }
                 }
         );
     }
-
     private String resolveFileType(Path path) {
         if (Files.isDirectory(path)) {
             return "[Dir]" + " " + path.getFileName().toString();
@@ -112,11 +129,13 @@ public class Controller implements Initializable {
             return "[File]" + " " + path.getFileName().toString();
         }
     }
-    public static String returnName_2(String str){
+
+    public String returnName2(String str) {
         String[] words = str.split(" ");
         return words[1];
     }
-    public static String returnName_1(String str){
+
+    public String returnName1(String str) {
         String[] words = str.split(" ");
         return words[0];
     }
@@ -130,7 +149,6 @@ public class Controller implements Initializable {
     private void refreshClientView() throws IOException {
         fileClientView.getItems().clear();
         List<String> names = Files.list(currentDir)
-//                .map(p -> p.getFileName().toString())
                 .map(this::resolveFileType)
                 .collect(Collectors.toList());
         fileClientView.getItems().addAll(names);
@@ -139,7 +157,7 @@ public class Controller implements Initializable {
     public void addNavigationListener() {
         fileClientView.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                String item = returnName_2(fileClientView.getSelectionModel().getSelectedItem());
+                String item = returnName2(fileClientView.getSelectionModel().getSelectedItem());
                 Path newPath = currentDir.resolve(item);
                 if (Files.isDirectory(newPath)) {
                     currentDir = newPath;
@@ -150,33 +168,20 @@ public class Controller implements Initializable {
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
-                } else {input.setText(item);}
-            }
-        });
-        fileServerView.setOnMouseClicked(e -> {
-
-            if (e.getClickCount() == 2) {
-                String item = returnName_2(fileServerView.getSelectionModel().getSelectedItem());
-                if (returnName_1(fileServerView.getSelectionModel().getSelectedItem()).equals("[Dir]")) {
-                    net.sendCommand(new PathInRequest(item));
-                }else {
+                } else {
                     input.setText(item);
                 }
             }
         });
-//        fileClientView.setOnMouseClicked(e -> {
-//            if (e.getClickCount() == 1) {
-//                String item = returnName(fileClientView.getSelectionModel().getSelectedItem());
-//                input.setText(item);
-//                log.debug("Output the file name to input ");
-//            }
-//        });
-//        fileServerView.setOnMouseClicked(e -> {
-//            if (e.getClickCount() == 1) {
-//                String item = returnName(fileServerView.getSelectionModel().getSelectedItem());
-//                input.setText(item);
-//                log.debug("Output the file name to input ");
-//            }
-//        });
+        fileServerView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = returnName2(fileServerView.getSelectionModel().getSelectedItem());
+                if (returnName1(fileServerView.getSelectionModel().getSelectedItem()).equals("[Dir]")) {
+                    net.sendCommand(new PathInRequest(item));
+                } else {
+                    input.setText(item);
+                }
+            }
+        });
     }
 }

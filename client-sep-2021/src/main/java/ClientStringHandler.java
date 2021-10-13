@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ClientStringHandler extends SimpleChannelInboundHandler<Command> {
 
-    private final Callback callback;
+    private Callback callback;
 
     public ClientStringHandler(Callback callback) {
         this.callback = callback;

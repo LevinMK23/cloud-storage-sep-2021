@@ -1,7 +1,5 @@
 package com.geekbrains;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 //Класс-команда для запроса отправки файла с сервера на клиент

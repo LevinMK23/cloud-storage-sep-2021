@@ -13,24 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
-    private static Path currentPath;
-
-    public FileMessageHandler() throws IOException {
-        currentPath= Paths.get("server-sep-2021", "root");//todo добавить к пути username
-        if (!Files.exists(currentPath)){
-            Files.createDirectory(currentPath);
-        }
-    }
-
+    private Path currentPath;
+    private Path clientPath;
+    DBAuthService service = new DBAuthService();
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         log.debug("Client connected!");
-        log.debug("Send list of files and current directory to the client");
-        //Отправляем список файлов в текущей папке на сервере
-        ctx.writeAndFlush(new ListResponse(currentPath));
-        //Отправляем текущую дирректорию
-        ctx.writeAndFlush(new PathResponse(currentPath.toString()));
     }
 
     @Override
@@ -44,7 +33,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                         fileMessage.getBytes()
                 );
                 ctx.writeAndFlush(new ListResponse(currentPath));
-                log.debug("Received a file {} from the client",fileMessage.getName());
+                log.debug("Received a file {} from the client", fileMessage.getName());
                 break;
 
             case FILE_REQUEST:
@@ -52,19 +41,22 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 String fileName = fileRequest.getName();
                 Path file = Paths.get(String.valueOf(currentPath), fileName);
                 ctx.writeAndFlush(new FileMessage(file));
-                log.debug("Send file {} to the client",fileName);
+                log.debug("Send file {} to the client", fileName);
                 break;
 
             case LIST_REQUEST:
                 ctx.writeAndFlush(new ListResponse(currentPath));
+                ctx.writeAndFlush(new PathResponse(currentPath.toString()));
                 log.debug("Send list of files to the client");
                 break;
 
             case PATH_UP_REQUEST:
-                if (currentPath.getParent()!=null){ //todo подумать над логикой, если будет авторизация пользователя
-                    //todo завести переменную, за которую нельзы выходить при регистрации и сравнивать при запросе
-                    // этой команды
-                    currentPath = currentPath.getParent();
+                if (currentPath.getParent() != null) {
+                    if (currentPath.equals(clientPath)) {
+                        log.debug("Above the client's folder , it is not necessary to rise");
+                    } else {
+                        currentPath = currentPath.getParent();
+                    }
                 }
                 log.debug("Send list of files and current directory to the client");
                 ctx.writeAndFlush(new ListResponse(currentPath));
@@ -74,15 +66,33 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
             case PATH_IN_REQUEST:
                 PathInRequest request = (PathInRequest) cmd;
                 Path newPAth = currentPath.resolve(request.getDir());
-                if(Files.isDirectory(newPAth)){
+                if (Files.isDirectory(newPAth)) {
                     currentPath = newPAth;
                     log.debug("Send list of files and current directory to the client");
+                    System.out.println(clientPath);
+                    System.out.println(currentPath);
                     ctx.writeAndFlush(new ListResponse(currentPath));
                     ctx.writeAndFlush(new PathResponse(currentPath.toString()));
                 }
-
+            case AUTH_REQUEST:
+                AuthRequest authRequest = (AuthRequest) cmd;
+                String login = authRequest.getLogin();
+                String password = authRequest.getPassword();
+                AuthResponse authResponse = new AuthResponse();
+                if (service.findByLogin(login).equals(password)) {
+                    authResponse.setAuthStatus(true);
+                    clientPath = Paths.get("server-sep-2021", login);
+                    if (!Files.exists(clientPath)) {
+                        Files.createDirectory(clientPath);
+                    }
+                    currentPath = clientPath;
+                } else {
+                    authResponse.setAuthStatus(false);
+                }
+                ctx.writeAndFlush(authResponse);
+                break;
             default:
-                log.debug("Invalid command {}",cmd.getType());
+                log.debug("Invalid command {}", cmd.getType());
                 break;
         }
     }

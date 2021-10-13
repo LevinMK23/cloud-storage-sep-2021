@@ -8,5 +8,7 @@ public enum CommandType {
     PATH_IN_REQUEST,
     PATH_UP_REQUEST,
     PATH_RESPONSE,
+    AUTH_RESPONSE,
+    AUTH_REQUEST
 
 }

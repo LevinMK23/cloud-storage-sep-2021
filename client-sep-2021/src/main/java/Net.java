@@ -18,7 +18,7 @@ public class Net {
 
     private static Net INSTANCE;
 
-    private final Callback callback;
+    private Callback callback;
     private SocketChannel channel;
 
     public static Net getInstance(Callback callback) {
@@ -67,5 +67,6 @@ public class Net {
     public void sendCommand(Command cmd) {
         channel.writeAndFlush(cmd);
     }
+
 
 }
