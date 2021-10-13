@@ -23,7 +23,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.geekbrains.netty.NettyEchoServer</mainClass>
+                            <mainClass>com.geekbrains.netty.NettyServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

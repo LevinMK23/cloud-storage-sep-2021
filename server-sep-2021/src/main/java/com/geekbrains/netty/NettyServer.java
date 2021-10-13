@@ -13,8 +13,8 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NettyEchoServer {
-    public NettyEchoServer() {
+public class NettyServer {
+    public NettyServer() {
 
         EventLoopGroup auth = new NioEventLoopGroup(1);
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -46,6 +46,6 @@ public class NettyEchoServer {
     }
 
     public static void main(String[] args) {
-        new NettyEchoServer();
+        new NettyServer();
     }
 }
