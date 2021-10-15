@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import com.geekbrains.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("server-sep-2021", "root");
@@ -23,18 +25,25 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
     protected void channelRead0(ChannelHandlerContext ctx, Command cmd) throws Exception {
 
         // TODO: 23.09.2021 Разработка системы команд
-        System.out.println("перед блоком аутентификации");
+
         if (!isLogin){
 
             if(cmd.getType().equals(CommandType.LOGIN_REQUEST)){
                 LoginRequest loginCommand = (LoginRequest) cmd;
 
                 ResultSet resultSet = SQLHandler.getUserFromDb(loginCommand.getLogin(),loginCommand.getPass());
-                if(resultSet==null) {
+                if(!resultSet.isBeforeFirst()) {
                     ctx.writeAndFlush(new LoginResponse(false,""));
 
 
                 }else {
+                    resultSet.next();
+                    log.debug("Db response contains");
+                    int i = 1;
+                    while (!resultSet.isAfterLast()){
+                        log.debug(" str : " + resultSet.getString("id")+ " : " + resultSet.getString("user_name"));
+                        resultSet.next();
+                    }
                     userDir = loginCommand.getLogin();
                     currentPath = ROOT.resolve(userDir);
 
@@ -67,7 +76,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
             }
 
         }else {
-            System.out.println("перед свич кейс");
+
             switch (cmd.getType()) {
                 case FILE_MESSAGE:// посмотреть возможность замены моей логики на chunked file на клиентскую и серверную сторону
                     FileMessage inMsg = (FileMessage) cmd;
@@ -93,6 +102,8 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                         if (!Files.exists(currentPath)) Files.createDirectory(currentPath);
 
                         ctx.writeAndFlush(new ListResponse(currentPath, currentPath.getFileName().toString()));
+                        currentPath.normalize();
+                        log.debug("Server send : {}",currentPath,currentPath.getFileName().toString());
                     }
 
 

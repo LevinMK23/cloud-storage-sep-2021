@@ -22,13 +22,14 @@ public class Net {
     private Callback callback;
 
     public void setCallback(Callback callback) {
-        if (this.callback.equals(callback)){
+
+            log.debug("Set callback : {}",callback);
             this.callback = callback;
             boolean isLogin = channel.pipeline().get(ClientFileMessageHandler.class).isLogin();
 
             channel.pipeline().remove(ClientFileMessageHandler.class);
             channel.pipeline().addLast(new ClientFileMessageHandler(callback,isLogin));
-        }
+
 
 
 
@@ -39,10 +40,11 @@ public class Net {
 
 
     public static Net getInstance(Callback callback) {
+        log.debug("new instance : {}",callback);
         if (INSTANCE == null) {
             INSTANCE = new Net(callback);
         }else INSTANCE.setCallback(callback);
-        System.out.println("new instance : "+callback.toString());
+
         return INSTANCE;
     }
 

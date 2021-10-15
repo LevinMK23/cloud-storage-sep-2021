@@ -46,42 +46,53 @@ public class Controller implements Initializable {
 
 
         String fileName = input.getText();
-        System.out.println("_____filename_____"+fileName);
+
         Path fileToSend = currentDir.resolve( fileName);
-        System.out.println("_____curdir+filename_____"+fileName);
+        log.debug("Prepare to send {}",fileName,currentDir);
+        if(!fileToSend.normalize().startsWith(userDir)){//тут не пускаем пользователя в другие папки
+            log.warn("message canceled : no access");
+            input.clear();
+            input.setText("message canceled - no access");
+        }else if (!Files.exists(fileToSend.normalize())){
+            log.warn("message canceled : the file or folder is missing");
+            input.clear();
+            input.setText("message canceled - the file or folder is missing");
+        } else {
+            if(Files.isDirectory(fileToSend)){
 
-        if(Files.isDirectory(fileToSend)){
-
-            net.sendFile(new ListRequest(fileName));
-        }else {
-            long fileSize = Files.size(fileToSend);
-            if(fileSize<= filesPartsSize){
-                net.sendFile(new FileMessage(fileToSend));
+                net.sendFile(new ListRequest(fileName));
             }else {
-                try(RandomAccessFile raf = new RandomAccessFile(fileToSend.toFile(),"r")){
-                    long skip = 0;
-                    boolean isFirstPart = true;
-                    while (skip<fileSize){
-                        if(skip + filesPartsSize > fileSize){
-                            byte[] bytes= new byte[(int)(fileSize-skip)];
-                            raf.read(bytes);
-                            net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
-                            skip+= fileSize-skip;
-                        }else {
-                            byte[] bytes = new byte[(int)filesPartsSize];
-                            raf.read(bytes);
-                            net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
-                            skip += filesPartsSize;
+                long fileSize = Files.size(fileToSend);
+                if(fileSize<= filesPartsSize){
+                    net.sendFile(new FileMessage(fileToSend));
+                }else {
+                    try(RandomAccessFile raf = new RandomAccessFile(fileToSend.toFile(),"r")){
+                        long skip = 0;
+                        boolean isFirstPart = true;
+                        while (skip<fileSize){
+                            if(skip + filesPartsSize > fileSize){
+                                byte[] bytes= new byte[(int)(fileSize-skip)];
+                                raf.read(bytes);
+                                net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
+                                skip+= fileSize-skip;
+                            }else {
+                                byte[] bytes = new byte[(int)filesPartsSize];
+                                raf.read(bytes);
+                                net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
+                                skip += filesPartsSize;
+                            }
+                            isFirstPart=false;
                         }
-                        isFirstPart=false;
+                    }catch (Exception e){
+                        log.error("Ошибка чтения файла", e);
                     }
-                }catch (Exception e){
-                    log.error("Ошибка чтения файла", e);
+
+
                 }
-
-
             }
         }
+
+
 
 
 
@@ -93,12 +104,12 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         controller = this;
-        log.debug("client started");
-        System.out.println("_____________Controller_______________");
+        log.debug("________client started___________");
+
 
 
         userDir = ClientFileMessageHandler.getCurPath();
-        currentDir = ClientFileMessageHandler.getCurPath();
+        currentDir = ROOT_DIR;
 
         // просим текущую директорию
         net = Net.getInstance(s -> Platform.runLater(()->switchCommands(s)) );
@@ -113,8 +124,8 @@ public class Controller implements Initializable {
 
 
     private List<String> splitLists(List<String> serverList) throws IOException {
-        System.out.println("cd: "+currentDir );
-        System.out.println("ud: "+userDir);
+        log.debug("cd: "+currentDir );
+        log.debug("ud: "+userDir);
         //тут объединяем листы чтобы показать их на стол
         List<String> clientListFiles = Files.list(currentDir)
                 .map(p -> p.getFileName().toString())
@@ -161,11 +172,14 @@ public class Controller implements Initializable {
     private void switchCommands(Command s) {
         // тут обрабатываю команды
 
-            System.out.println("__set__controller___callback");
+
             switch (s.getType()) {
                 case LIST_RESPONSE:
                     ListResponse lr = (ListResponse) s;
-                    currentDir.resolve(lr.getCurrentDir());
+                    log.debug("List response contains: {}",lr.getCurrentDir());
+                    currentDir = currentDir.resolve(lr.getCurrentDir());
+                    currentDir = currentDir.normalize();
+                    log.debug("Move to dir : {}",currentDir);
 
                     try {
                         refreshTableView(splitLists(lr.getFilesList()));
