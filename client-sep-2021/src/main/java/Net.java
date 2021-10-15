@@ -9,6 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import javafx.application.Platform;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,9 +22,16 @@ public class Net {
     private Callback callback;
 
     public void setCallback(Callback callback) {
-        this.callback = callback;
-        ClientFileMessageHandler cfmh = channel.pipeline().get(ClientFileMessageHandler.class);
-        cfmh.setCallback(callback);
+        if (this.callback.equals(callback)){
+            this.callback = callback;
+            boolean isLogin = channel.pipeline().get(ClientFileMessageHandler.class).isLogin();
+
+            channel.pipeline().remove(ClientFileMessageHandler.class);
+            channel.pipeline().addLast(new ClientFileMessageHandler(callback,isLogin));
+        }
+
+
+
 
     }
 
@@ -33,7 +41,8 @@ public class Net {
     public static Net getInstance(Callback callback) {
         if (INSTANCE == null) {
             INSTANCE = new Net(callback);
-        }
+        }else INSTANCE.setCallback(callback);
+        System.out.println("new instance : "+callback.toString());
         return INSTANCE;
     }
 
@@ -55,7 +64,7 @@ public class Net {
                                 channel.pipeline().addLast(
                                         new ObjectEncoder(),
                                         new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                        new ClientFileMessageHandler(callback)
+                                        new ClientFileMessageHandler(callback,false)
 
                                 );
                             }

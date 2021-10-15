@@ -90,6 +90,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                         ctx.writeAndFlush(new ListResponse(currentPath, userDir));
                     } else {
                         currentPath=currentPath.resolve(lrq.getDir());
+                        if (!Files.exists(currentPath)) Files.createDirectory(currentPath);
 
                         ctx.writeAndFlush(new ListResponse(currentPath, currentPath.getFileName().toString()));
                     }
