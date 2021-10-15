@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Добавлена проверка на уникальность логина">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Добавлена логика перемещения по директории пользователя на серверную сторону, далее надо добавить на клиент.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/root/1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/root/target.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Callback.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Callback.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
     </list>
@@ -24,6 +29,7 @@
         <option value="FxmlFile" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -263,7 +269,21 @@
       <option name="project" value="LOCAL" />
       <updated>1633969292953</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Добавлена логика перемещения по директории пользователя на серверную сторону, далее надо добавить на клиент.">
+      <created>1633977702381</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1633977702381</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Добавлена логика перемещения по директории пользователя на серверную сторону, далее надо добавить на клиент.">
+      <created>1633977800403</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1633977800403</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -304,6 +324,17 @@
     <MESSAGE value="Добавлена база данных MySQL, отлажена пара функций" />
     <MESSAGE value="Теперь, добавлен переход к новому окну после ответа от сервера. Клиент готов, осталось написать базовые фенкции." />
     <MESSAGE value="Добавлена проверка на уникальность логина" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлена проверка на уникальность логина" />
+    <MESSAGE value="Добавлена логика перемещения по директории пользователя на серверную сторону, далее надо добавить на клиент." />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлена логика перемещения по директории пользователя на серверную сторону, далее надо добавить на клиент." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

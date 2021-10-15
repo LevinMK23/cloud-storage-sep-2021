@@ -15,9 +15,20 @@ import lombok.extern.slf4j.Slf4j;
 public class Net {
 
     private static Net INSTANCE;
-
-    private final Callback callback;
     private SocketChannel channel;
+
+
+    private Callback callback;
+
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+        ClientFileMessageHandler cfmh = channel.pipeline().get(ClientFileMessageHandler.class);
+        cfmh.setCallback(callback);
+
+    }
+
+
+
 
     public static Net getInstance(Callback callback) {
         if (INSTANCE == null) {
@@ -73,9 +84,7 @@ public class Net {
 
     }
 
-    public  SocketChannel getCannel(){
-        return channel;
-    }
+
     // send command here "channel.write...
 
 }

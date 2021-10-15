@@ -2,8 +2,6 @@ package com.geekbrains.netty;
 
 import java.nio.file.*;
 import java.sql.ResultSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.geekbrains.*;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,8 +10,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("server-sep-2021", "root");
-    private Path currentPath = null;
-    private String user;
+    private static Path currentPath = null;
+    private static String userDir;
     private boolean isLogin = false;
 
 
@@ -37,26 +35,34 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
 
                 }else {
-                    ctx.writeAndFlush(new LoginResponse(true,loginCommand.getLogin()));
-                    currentPath = ROOT.resolve(loginCommand.getLogin());
+                    userDir = loginCommand.getLogin();
+                    currentPath = ROOT.resolve(userDir);
+
+                    ctx.writeAndFlush(new LoginResponse(true,userDir));
+
                     isLogin = true;
 
                 }
 
             }else if(cmd.getType().equals(CommandType.REGISTRATION_REQUEST)){
                 RegistrationRequest reg = (RegistrationRequest) cmd;
+
                 if(SQLHandler.createNewUser(reg.getUserName(),reg.getPass())){
-                    ctx.write(new LoginResponse(true,reg.getUserName()));
-                    currentPath = ROOT.resolve(reg.getUserName());
-                    user=reg.getUserName();
+                    userDir =reg.getUserName();
+
+                    currentPath = ROOT.resolve(userDir);
+
+                    System.out.println("NEW USER REGISTRED " + userDir );
                     isLogin = true;
-                }else ctx.write(new LoginResponse(false,""));
+
+                    ctx.writeAndFlush(new LoginResponse(true,userDir));
+                }else ctx.writeAndFlush(new LoginResponse(false,""));
 
 
 
 
             }else{
-                ctx.write(new LoginResponse(false,""));
+                ctx.writeAndFlush(new LoginResponse(false,""));
 
             }
 
@@ -77,18 +83,21 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     }
                     break;
                 case LIST_REQUEST:
+                    ListRequest lrq = (ListRequest) cmd;
+                    System.out.println("cp :"+ currentPath);
+                    System.out.println("ud :"+ userDir);
+                    if(lrq.getDir().equals("*")){
+                        ctx.writeAndFlush(new ListResponse(currentPath, userDir));
+                    } else {
+                        currentPath=currentPath.resolve(lrq.getDir());
+
+                        ctx.writeAndFlush(new ListResponse(currentPath, currentPath.getFileName().toString()));
+                    }
 
 
-                    ctx.writeAndFlush(new ListResponse(currentPath,user));
                     break;
 
-                case CD_REQUEST:
-                    CdRequest cdRequest = (CdRequest)cmd;
-                    Path newPath = currentPath.resolve(cdRequest.getDir());
-                    if(!Files.exists(newPath)) Files.createDirectory(newPath);
-                    newPath = currentPath;
-                    ctx.writeAndFlush(new CdResponse(newPath));
-                    break;
+
             }
         }
 
