@@ -35,6 +35,7 @@ public class ClientFileMessageHandler extends SimpleChannelInboundHandler<Comman
 
     public ClientFileMessageHandler(Callback callback,boolean isLogin) {
 
+
         this.callback = callback;
         this.isLogin = isLogin;
 

@@ -6,6 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="изменили настройки gitignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Foo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/streamApi/Foo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/streamApi/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/Handler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/IoIntro.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/EchoHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/Intro.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringInboundHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringOutboundHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/BufferTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/NioUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,11 +172,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.App" />
+        <item itemvalue="Application.CloudServer" />
         <item itemvalue="Application.Server (1)" />
         <item itemvalue="Application.NioUtils" />
-        <item itemvalue="Application.CloudServer" />
         <item itemvalue="Application.BufferTest" />
-        <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
   </component>

@@ -29,6 +29,13 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
     protected void channelRead0(ChannelHandlerContext ctx, Command cmd) throws Exception {
 
         // TODO: 23.09.2021 Разработка системы команд
+        if(!Files.exists(ROOT)) {
+            try {
+                Files.createDirectory(ROOT);
+            } catch (IOException e) {
+                log.error("Cant create root dir!",e);
+            }
+        }
 
         if (!isLogin){
 
@@ -125,7 +132,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     String fileName = frq.getFileName();
                     if(Files.exists(currentPath.resolve(fileName))){
 
-                        sendFileToclient(currentPath.resolve(fileName),fileName,ctx);
+                        sendFileToClient(currentPath.resolve(fileName),fileName,ctx);
                         ctx.writeAndFlush(new FileResponse(true,"success..start send file"));
                     }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
                     break;
@@ -136,7 +143,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
 
     }
-    private void sendFileToclient(Path fileToSend,String fileName,ChannelHandlerContext ctx) throws IOException {
+    private void sendFileToClient(Path fileToSend, String fileName, ChannelHandlerContext ctx) throws IOException {
         long fileSize = Files.size(fileToSend);
         if(fileSize<= filesPartsSize){//маленький
             ctx.writeAndFlush(new FileMessage(fileToSend));

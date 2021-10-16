@@ -121,7 +121,13 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        if(!Files.exists(ROOT_DIR)) {
+            try {
+                Files.createDirectory(ROOT_DIR);
+            } catch (IOException e) {
+                log.error("Cant create root dir!",e);
+            }
+        }
         controller = this;
         log.debug("________client started___________");
 
