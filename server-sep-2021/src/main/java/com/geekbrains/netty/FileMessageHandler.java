@@ -1,5 +1,7 @@
 package com.geekbrains.netty;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.*;
 import java.sql.ResultSet;
 
@@ -15,6 +17,8 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
     private static Path currentPath = null;
     private static String userDir;
     private boolean isLogin = false;
+    private Path userPath;
+    private static final int filesPartsSize = 100000;
 
 
 
@@ -46,6 +50,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     }
                     userDir = loginCommand.getLogin();
                     currentPath = ROOT.resolve(userDir);
+                    userPath = ROOT.resolve(userDir);
 
                     ctx.writeAndFlush(new LoginResponse(true,userDir));
 
@@ -60,6 +65,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     userDir =reg.getUserName();
 
                     currentPath = ROOT.resolve(userDir);
+                    userPath = ROOT.resolve(userDir);
 
                     System.out.println("NEW USER REGISTRED " + userDir );
                     isLogin = true;
@@ -82,7 +88,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     FileMessage inMsg = (FileMessage) cmd;
                     if(inMsg.isFirstPart()){
 
-                        Files.write(currentPath.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);//тут может быть ошибка
+                        Files.write(currentPath.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);
 
                     }else {
 
@@ -93,20 +99,35 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     break;
                 case LIST_REQUEST:
                     ListRequest lrq = (ListRequest) cmd;
-                    System.out.println("cp :"+ currentPath);
-                    System.out.println("ud :"+ userDir);
-                    if(lrq.getDir().equals("*")){
+
+                    if(lrq.getDir().equals("*")){//обрабатываем первичный запрос на то что есть в папке пользователя на сервере
+
                         ctx.writeAndFlush(new ListResponse(currentPath, userDir));
-                    } else {
-                        currentPath=currentPath.resolve(lrq.getDir());
-                        if (!Files.exists(currentPath)) Files.createDirectory(currentPath);
+                    } else if(lrq.getDir().equals("**")){// обрабатываем запрос на обновление в текущей папке
+                        ctx.writeAndFlush(new ListResponse(currentPath,"**"));
 
-                        ctx.writeAndFlush(new ListResponse(currentPath, currentPath.getFileName().toString()));
-                        currentPath.normalize();
-                        log.debug("Server send : {}",currentPath,currentPath.getFileName().toString());
+                    }else {//тут обрабатываются переходы по папкам
+
+                        if (currentPath.resolve(lrq.getDir()).normalize().startsWith(userPath)){//на всякий случай не разрешаем уйти за папку пользователя
+                            currentPath=currentPath.resolve(lrq.getDir());
+
+                            if (!Files.exists(currentPath)) Files.createDirectory(currentPath);
+
+                            ctx.writeAndFlush(new ListResponse(currentPath, currentPath.getFileName().toString()));
+                            currentPath.normalize();
+                            log.debug("Server send : {}",currentPath,currentPath.getFileName().toString());
+                        }
+
                     }
+                    break;
+                case FILE_REQUEST:
+                    FileRequest frq = (FileRequest) cmd;
+                    String fileName = frq.getFileName();
+                    if(Files.exists(currentPath.resolve(fileName))){
 
-
+                        sendFileToclient(currentPath.resolve(fileName),fileName,ctx);
+                        ctx.writeAndFlush(new FileResponse(true,"success..start send file"));
+                    }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
                     break;
 
 
@@ -114,6 +135,40 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
         }
 
 
+    }
+    private void sendFileToclient(Path fileToSend,String fileName,ChannelHandlerContext ctx) throws IOException {
+        long fileSize = Files.size(fileToSend);
+        if(fileSize<= filesPartsSize){//маленький
+            ctx.writeAndFlush(new FileMessage(fileToSend));
+
+        }else {
+            //большой
+            sendBigFile(fileName, fileToSend, fileSize,ctx);
+
+
+        }
+    }
+    private void sendBigFile(String fileName, Path fileToSend, long fileSize,ChannelHandlerContext ctx) {
+        try(RandomAccessFile raf = new RandomAccessFile(fileToSend.toFile(),"r")){
+            long skip = 0;
+            boolean isFirstPart = true;
+            while (skip< fileSize){
+                if(skip + filesPartsSize > fileSize){
+                    byte[] bytes= new byte[(int)(fileSize -skip)];
+                    raf.read(bytes);
+                    ctx.writeAndFlush(new FileMessage(fileName,bytes, fileSize,isFirstPart));
+                    skip+= fileSize -skip;
+                }else {
+                    byte[] bytes = new byte[(int)filesPartsSize];
+                    raf.read(bytes);
+                    ctx.writeAndFlush(new FileMessage(fileName,bytes, fileSize,isFirstPart));
+                    skip += filesPartsSize;
+                }
+                isFirstPart=false;
+            }
+        }catch (Exception e){
+            log.error("Ошибка чтения файла", e);
+        }
     }
 
 

@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -38,6 +39,9 @@ public class Controller implements Initializable {
     private Net net;
 
 
+    private final String line = "_________________________________________";
+
+
 
 
 
@@ -49,46 +53,37 @@ public class Controller implements Initializable {
 
         Path fileToSend = currentDir.resolve( fileName);
         log.debug("Prepare to send {}",fileName,currentDir);
-        if(!fileToSend.normalize().startsWith(userDir)){//тут не пускаем пользователя в другие папки
+        if(!fileToSend.normalize().startsWith(userDir)){
+            //тут не пускаем пользователя в другие папки
             log.warn("message canceled : no access");
             input.clear();
             input.setText("message canceled - no access");
         }else if (!Files.exists(fileToSend.normalize())){
+            //не даём отправить несуществующие файлы
             log.warn("message canceled : the file or folder is missing");
             input.clear();
             input.setText("message canceled - the file or folder is missing");
+        } else if (fileName.isEmpty()){
+            // обновляем окно если отправлен пустой запрос
+            net.sendFile(new ListRequest("**"));
         } else {
             if(Files.isDirectory(fileToSend)){
+                //отправляем запрос на переход или созданиеновой директории на сервере
 
                 net.sendFile(new ListRequest(fileName));
             }else {
+                // передаём файл
                 long fileSize = Files.size(fileToSend);
-                if(fileSize<= filesPartsSize){
+                if(fileSize<= filesPartsSize){//маленький
                     net.sendFile(new FileMessage(fileToSend));
+                    net.sendFile(new ListRequest("**"));
                 }else {
-                    try(RandomAccessFile raf = new RandomAccessFile(fileToSend.toFile(),"r")){
-                        long skip = 0;
-                        boolean isFirstPart = true;
-                        while (skip<fileSize){
-                            if(skip + filesPartsSize > fileSize){
-                                byte[] bytes= new byte[(int)(fileSize-skip)];
-                                raf.read(bytes);
-                                net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
-                                skip+= fileSize-skip;
-                            }else {
-                                byte[] bytes = new byte[(int)filesPartsSize];
-                                raf.read(bytes);
-                                net.sendFile(new FileMessage(fileName,bytes,fileSize,isFirstPart));
-                                skip += filesPartsSize;
-                            }
-                            isFirstPart=false;
-                        }
-                    }catch (Exception e){
-                        log.error("Ошибка чтения файла", e);
-                    }
-
+                    //большой
+                    sendBigFile(fileName, fileToSend, fileSize);
+                    net.sendFile(new ListRequest("**"));
 
                 }
+                input.clear();
             }
         }
 
@@ -98,6 +93,30 @@ public class Controller implements Initializable {
 
 
 
+
+    }
+
+    private void sendBigFile(String fileName, Path fileToSend, long fileSize) {
+        try(RandomAccessFile raf = new RandomAccessFile(fileToSend.toFile(),"r")){
+            long skip = 0;
+            boolean isFirstPart = true;
+            while (skip< fileSize){
+                if(skip + filesPartsSize > fileSize){
+                    byte[] bytes= new byte[(int)(fileSize -skip)];
+                    raf.read(bytes);
+                    net.sendFile(new FileMessage(fileName,bytes, fileSize,isFirstPart));
+                    skip+= fileSize -skip;
+                }else {
+                    byte[] bytes = new byte[(int)filesPartsSize];
+                    raf.read(bytes);
+                    net.sendFile(new FileMessage(fileName,bytes, fileSize,isFirstPart));
+                    skip += filesPartsSize;
+                }
+                isFirstPart=false;
+            }
+        }catch (Exception e){
+            log.error("Ошибка чтения файла", e);
+        }
     }
 
     @Override
@@ -111,11 +130,11 @@ public class Controller implements Initializable {
         userDir = ClientFileMessageHandler.getCurPath();
         currentDir = ROOT_DIR;
 
-        // просим текущую директорию
+
         net = Net.getInstance(s -> Platform.runLater(()->switchCommands(s)) );
 
 
-
+        // просим текущую директорию
         net.sendFile(new ListRequest("*"));
 
     }
@@ -124,6 +143,7 @@ public class Controller implements Initializable {
 
 
     private List<String> splitLists(List<String> serverList) throws IOException {
+        //окно примерно 60 знаков .15 знаков служебные условно 45 знаков на строку - фигня получсилась
         log.debug("cd: "+currentDir );
         log.debug("ud: "+userDir);
         //тут объединяем листы чтобы показать их на стол
@@ -134,18 +154,24 @@ public class Controller implements Initializable {
 
         for (int i = 0; i < clientListFiles.size(); i++) {
             if(Files.isDirectory(currentDir.resolve(clientListFiles.get(i)))){
-                clientListFiles.set(i, "[D]:" + clientListFiles.get(i) + ":[c][X]");
-            }else  clientListFiles.set(i, "<f>:" + clientListFiles.get(i) + ":[c][X]");
+                clientListFiles.set(i, "[D]:" + clientListFiles.get(i)+":" + fill(clientListFiles.get(i).length()) + ":[c][X]");
+            }else  clientListFiles.set(i, "<f>:" + clientListFiles.get(i)+":" + fill(clientListFiles.get(i).length()) + ":[c][X]");
 
         }
-        for (int i = 0; i < serverList.size(); i++) {// проверить логику подготовки серверного листа
+        for (int i = 0; i < serverList.size(); i++) {
 
-            String item = serverList.get(i) + ":[c][X]";
+            String item = serverList.get(i)+":"+fill(serverList.get(i).length()-4) + ":[c][X]";
             if (clientListFiles.contains(item)) {
                 int index = clientListFiles.indexOf(item);
-                clientListFiles.set(index, serverList.get(i) + ":[c][s]");
-            } else clientListFiles.add(serverList.get(i) + ":[X][s]");
+                clientListFiles.set(index, serverList.get(i)+":"+fill(serverList.get(i).length()-4) + ":[c][s]");
+            } else clientListFiles.add(serverList.get(i)+":"+fill(serverList.get(i).length()-4) + ":[X][s]");
         }
+        clientListFiles.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.compareTo(o1);
+            }
+        });
         if (!currentDir.equals(userDir)){
             serverList.clear();
 
@@ -177,7 +203,7 @@ public class Controller implements Initializable {
                 case LIST_RESPONSE:
                     ListResponse lr = (ListResponse) s;
                     log.debug("List response contains: {}",lr.getCurrentDir());
-                    currentDir = currentDir.resolve(lr.getCurrentDir());
+                    if(!lr.getCurrentDir().equals("**")) currentDir = currentDir.resolve(lr.getCurrentDir());
                     currentDir = currentDir.normalize();
                     log.debug("Move to dir : {}",currentDir);
 
@@ -194,6 +220,13 @@ public class Controller implements Initializable {
                     } catch (IOException e) {
                         log.error("Ошибка записи файла", e);
                     }
+                    break;
+                case FILE_RESPONSE:
+                    FileResponse fileResponse = (FileResponse) s;
+                    if(fileResponse.isDone()){
+                        input.setText(fileResponse.getMessage());
+                        net.sendFile(new ListRequest("**"));
+                    }else input.setText(fileResponse.getMessage());
                     break;
 
 
@@ -216,7 +249,30 @@ public class Controller implements Initializable {
 
         }
     }
+    private String fill (int count){// заполняет пробелы линиями в строках
+        count+=12;
+        if (count<0||count>=line.length()){
+            log.warn("ошибка заполнения строк");
+            return "";
+        }else {
+            return line.substring(count);
+        }
+    }
 
 
+    public void getInStorage(ActionEvent event) {
+        //тут просим у сервера файл
+        String requestFile = input.getText();
+        String onlyServerHas = "<f>:"+ requestFile +":"+ fill(requestFile.length()) + ":[X][s]";
+        String clientAndServer = "<f>:"+ requestFile+":" + fill(requestFile.length()) + ":[c][s]";
 
+
+        if(requestFile.equals("..")||!(listView.getItems().contains(onlyServerHas)||listView.getItems().contains(clientAndServer))){
+            //тут не даём скачивать несуществующее
+            log.warn("attempt to download a non-existent file");
+            input.setText("Please, select an existing file");
+        }else {
+            net.sendFile(new FileRequest(requestFile));
+        }
+    }
 }

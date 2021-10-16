@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="теперь коллбэки работают, и окна нормально переключаются.">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="изменили настройки gitignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +20,8 @@
       <list>
         <option value="FxmlFile" />
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -63,9 +60,9 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.3297362" />
     <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
   </component>
   <component name="RecentsManager">
@@ -115,8 +112,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="NettyEchoServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.geekbrains.netty.NettyEchoServer" />
+    <configuration name="CloudServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.geekbrains.netty.CloudServer" />
       <module name="server-sep-2021" />
       <extension name="coverage">
         <pattern>
@@ -156,11 +153,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.App" />
-        <item itemvalue="Application.NettyEchoServer" />
         <item itemvalue="Application.Server (1)" />
-        <item itemvalue="Application.BufferTest" />
         <item itemvalue="Application.NioUtils" />
+        <item itemvalue="Application.CloudServer" />
+        <item itemvalue="Application.BufferTest" />
+        <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
   </component>
@@ -292,7 +289,119 @@
       <option name="project" value="LOCAL" />
       <updated>1634313768786</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Теперь, приложение умеет передвигаться по папкам внутри директории юзера и не может выйти за директорию юзера, не может создавать кривые папки на сервере.">
+      <created>1634327197710</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1634327197710</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Теперь, приложение умеет обновлять лист после каждой пересылки, а также обновлять текущую папку при отсылке пустого запроса">
+      <created>1634334520660</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1634334520660</updated>
+    </task>
+    <task id="LOCAL-00019" summary="теперь, приложение умеет скачивать файлы с сервера">
+      <created>1634340122469</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1634340122469</updated>
+    </task>
+    <task id="LOCAL-00020" summary="теперь, приложение умеет скачивать файлы с сервера">
+      <created>1634340134119</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1634340134119</updated>
+    </task>
+    <task id="LOCAL-00021" summary="изменили настройки gitignore">
+      <created>1634340702052</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1634340702052</updated>
+    </task>
+    <task id="LOCAL-00022" summary="изменили настройки gitignore">
+      <created>1634340853360</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1634340853360</updated>
+    </task>
+    <task id="LOCAL-00023" summary="изменили настройки gitignore">
+      <created>1634341759495</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1634341759496</updated>
+    </task>
+    <task id="LOCAL-00024" summary="изменили настройки gitignore">
+      <created>1634341776659</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1634341776659</updated>
+    </task>
+    <task id="LOCAL-00025" summary="изменили настройки gitignore">
+      <created>1634344495427</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1634344495427</updated>
+    </task>
+    <task id="LOCAL-00026" summary="изменили настройки gitignore">
+      <created>1634344932355</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1634344932355</updated>
+    </task>
+    <task id="LOCAL-00027" summary="изменили настройки gitignore">
+      <created>1634345373010</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1634345373010</updated>
+    </task>
+    <task id="LOCAL-00028" summary="изменили настройки gitignore">
+      <created>1634346141813</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1634346141813</updated>
+    </task>
+    <task id="LOCAL-00029" summary="изменили настройки gitignore">
+      <created>1634347232006</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1634347232006</updated>
+    </task>
+    <task id="LOCAL-00030" summary="изменили настройки gitignore">
+      <created>1634347275557</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1634347275557</updated>
+    </task>
+    <task id="LOCAL-00031" summary="изменили настройки gitignore">
+      <created>1634347572825</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1634347572825</updated>
+    </task>
+    <task id="LOCAL-00032" summary="изменили настройки gitignore">
+      <created>1634348056400</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1634348056400</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,7 +418,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="project_1_big_file_problem" />
+                        <option value="project3_uploads" />
                       </list>
                     </value>
                   </entry>
@@ -336,7 +445,11 @@
     <MESSAGE value="Добавлена логика перемещения по директории пользователя на серверную сторону, далее надо добавить на клиент." />
     <MESSAGE value="рефактор, добавлена логика подмены колбэка для сцен" />
     <MESSAGE value="теперь коллбэки работают, и окна нормально переключаются." />
-    <option name="LAST_COMMIT_MESSAGE" value="теперь коллбэки работают, и окна нормально переключаются." />
+    <MESSAGE value="Теперь, приложение умеет передвигаться по папкам внутри директории юзера и не может выйти за директорию юзера, не может создавать кривые папки на сервере." />
+    <MESSAGE value="Теперь, приложение умеет обновлять лист после каждой пересылки, а также обновлять текущую папку при отсылке пустого запроса" />
+    <MESSAGE value="теперь, приложение умеет скачивать файлы с сервера" />
+    <MESSAGE value="изменили настройки gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="изменили настройки gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

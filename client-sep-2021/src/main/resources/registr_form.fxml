@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:controller="RegistrController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="166.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <Label layoutX="22.0" layoutY="14.0" prefHeight="17.0" prefWidth="141.0" text="USER NAME" />
+      <Label layoutX="22.0" layoutY="55.0" prefHeight="17.0" prefWidth="141.0" text="PASS" />
+      <TextField fx:id="userNameReg" layoutX="185.0" layoutY="10.0" />
+      <TextField fx:id="passFieldReg" layoutX="185.0" layoutY="51.0" />
+      <Button fx:id="backToLoginButton" layoutX="21.0" layoutY="127.0" mnemonicParsing="false" onAction="#backToLogin" prefHeight="25.0" prefWidth="68.0" text="&lt;LOGIN" />
+      <Button fx:id="registrationButton" layoutX="99.0" layoutY="127.0" mnemonicParsing="false" onAction="#sendRegistrationInfo" prefHeight="25.0" prefWidth="235.0" text="REGISTR " />
+      <Label layoutX="22.0" layoutY="94.0" prefHeight="17.0" prefWidth="135.0" text="CONFIRM PASS" />
+      <TextField fx:id="confirmPassReg" layoutX="185.0" layoutY="90.0" />
+   </children>
+</AnchorPane>
