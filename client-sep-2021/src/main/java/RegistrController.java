@@ -85,7 +85,7 @@ public class RegistrController implements Initializable {
         stage.hide();
         Parent parent = null;
         try {
-            parent = FXMLLoader.load(getClass().getResource("chat.fxml"));
+            parent = FXMLLoader.load(getClass().getResource("app_form.fxml"));
         } catch (IOException e) {
             log.error("cant open new window",e);
         }

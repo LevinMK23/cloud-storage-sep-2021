@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="488.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <TextField fx:id="input" layoutX="14.0" layoutY="439.0" prefHeight="37.0" prefWidth="239.0" />
+   <Button layoutX="263.0" layoutY="445.0" mnemonicParsing="false" onAction="#moveOrSend" prefHeight="25.0" prefWidth="114.0" text="send" />
+   <Button layoutX="389.0" layoutY="445.0" mnemonicParsing="false" onAction="#getInStorage" prefHeight="25.0" prefWidth="114.0" text="upload" />
+   <TreeTableView fx:id="treeTableView" layoutX="15.0" layoutY="14.0" prefHeight="415.0" prefWidth="496.0">
+     <columns>
+       <TreeTableColumn fx:id="filesCol" onEditCommit="#fileOrFolderEdit" prefWidth="358.0" text="files" />
+         <TreeTableColumn fx:id="clientStatusCol" editable="false" prefWidth="72.0" text="client " />
+         <TreeTableColumn fx:id="serverStatusCol" editable="false" prefWidth="65.0" text="server" />
+     </columns>
+   </TreeTableView>
+</AnchorPane>

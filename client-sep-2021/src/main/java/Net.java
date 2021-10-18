@@ -1,4 +1,5 @@
 import com.geekbrains.Command;
+import com.geekbrains.FileItem;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -25,12 +26,14 @@ public class Net {
 
             log.debug("Set callback : {}",callback);
             this.callback = callback;
-            boolean isLogin = channel.pipeline().get(ClientFileMessageHandler.class).isLogin();
-
+            ClientFileMessageHandler thisHandler = channel.pipeline().get(ClientFileMessageHandler.class);
+            boolean isLogin = thisHandler.isLogin();
+            log.debug(thisHandler.toString());
             channel.pipeline().remove(ClientFileMessageHandler.class);
+
             channel.pipeline().addLast(new ClientFileMessageHandler(callback,isLogin));
 
-
+            log.debug(thisHandler.toString());
 
 
 
@@ -85,9 +88,7 @@ public class Net {
         thread.start();
     }
 
-    public void sendMessage(String msg) {
-        channel.writeAndFlush(msg);
-    }
+
 
     public void sendFile(Command command) {
         channel.writeAndFlush(command);

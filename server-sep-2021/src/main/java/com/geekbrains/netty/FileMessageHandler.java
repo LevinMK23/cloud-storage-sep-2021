@@ -27,7 +27,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Command cmd) throws Exception {
-
+        log.debug("Message received {}" , cmd);
         // TODO: 23.09.2021 Разработка системы команд
         if(!Files.exists(ROOT)) {
             try {
@@ -50,7 +50,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 }else {
                     resultSet.next();
                     log.debug("Db response contains");
-                    int i = 1;
+
                     while (!resultSet.isAfterLast()){
                         log.debug(" str : " + resultSet.getString("id")+ " : " + resultSet.getString("user_name"));
                         resultSet.next();
@@ -107,27 +107,36 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 case LIST_REQUEST:
                     ListRequest lrq = (ListRequest) cmd;
 
-                    if(lrq.getDir().equals("*")){//обрабатываем первичный запрос на то что есть в папке пользователя на сервере
-
-                        ctx.writeAndFlush(new ListResponse(currentPath, userDir));
-                    } else if(lrq.getDir().equals("**")){// обрабатываем запрос на обновление в текущей папке
-                        ctx.writeAndFlush(new ListResponse(currentPath,"**"));
-
-                    }else {//тут обрабатываются переходы по папкам
+                    //тут обрабатываются переходы по папкам
 
                         if (currentPath.resolve(lrq.getDir()).normalize().startsWith(userPath)){//на всякий случай не разрешаем уйти за папку пользователя
                             currentPath=currentPath.resolve(lrq.getDir());
 
                             if (!Files.exists(currentPath)) Files.createDirectory(currentPath);
 
-                            ctx.writeAndFlush(new ListResponse(currentPath, currentPath.getFileName().toString()));
+                            ctx.writeAndFlush(new ListResponse(currentPath,false, Paths.get(lrq.getDir())));
                             currentPath.normalize();
                             log.debug("Server send : {}",currentPath,currentPath.getFileName().toString());
                         }
 
-                    }
+
+                    break;
+                case FIRST_REQUEST: //обрабатываем первичный запрос на то что есть в папке пользователя на сервере
+                    FirstRequest fq = (FirstRequest) cmd;
+                    log.debug("First Handle : {}", userPath);
+                    ListResponse listResponse = new ListResponse(userPath,true,userPath);
+
+                    ctx.writeAndFlush(listResponse);
+
+                    break;
+                case REFRESH_REQUEST:
+                    RefreshRequest rfrq = (RefreshRequest) cmd;
+                    ctx.writeAndFlush(new ListResponse(rfrq.getCurentItem(),false, rfrq.getCurentItem()));
+
+
                     break;
                 case FILE_REQUEST:
+
                     FileRequest frq = (FileRequest) cmd;
                     String fileName = frq.getFileName();
                     if(Files.exists(currentPath.resolve(fileName))){
@@ -135,8 +144,8 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                         sendFileToClient(currentPath.resolve(fileName),fileName,ctx);
                         ctx.writeAndFlush(new FileResponse(true,"success..start send file"));
                     }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
-                    break;
 
+                break;
 
             }
         }

@@ -1,14 +1,14 @@
 package com.geekbrains;
 
-import java.util.List;
+import java.nio.file.Path;
 
 
 public class ListRequest extends Command {
 
     private String dir ;
 
-    public ListRequest(String dir) {
-        this.dir = dir;
+    public ListRequest(Path dir) {
+        this.dir = dir.toString();
     }
 
     public String getDir() {

@@ -4,27 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="изменили настройки gitignore">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="удалил лишнее, добавил проверку на существование корневой директории">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientStringHandler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Foo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/streamApi/Test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/streamApi/Foo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/streamApi/Test.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/Handler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/IoIntro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/io/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/EchoHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/RegistrController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/RegistrController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListResponse.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/Intro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/NettyEchoServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringInboundHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/StringOutboundHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/BufferTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/NioUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/nio/Server.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -420,7 +413,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634348056400</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="удалил лишнее, добавил проверку на существование корневой директории">
+      <created>1634373220981</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1634373220981</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -468,7 +468,8 @@
     <MESSAGE value="Теперь, приложение умеет обновлять лист после каждой пересылки, а также обновлять текущую папку при отсылке пустого запроса" />
     <MESSAGE value="теперь, приложение умеет скачивать файлы с сервера" />
     <MESSAGE value="изменили настройки gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="изменили настройки gitignore" />
+    <MESSAGE value="удалил лишнее, добавил проверку на существование корневой директории" />
+    <option name="LAST_COMMIT_MESSAGE" value="удалил лишнее, добавил проверку на существование корневой директории" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -5,18 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 import com.geekbrains.*;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -37,9 +39,28 @@ public class Controller implements Initializable {
     public ListView<String> listView;
     public TextField input;
     private Net net;
+    @FXML
+    TreeTableView<FileItem> treeTableView;
+    @FXML
+    TreeTableColumn<FileItem,Boolean> clientStatusCol;
+    @FXML
+    TreeTableColumn<FileItem,Boolean> serverStatusCol;
+    @FXML
+    TreeTableColumn<FileItem,String> filesCol;
+
+    TreeItem<FileItem> root;
+    TreeItem<FileItem> currentNode;
 
 
-    private final String line = "_________________________________________";
+
+    private final ImageView folderIcon = new ImageView (
+            new Image(getClass().getResourceAsStream("folder(17x15).png"))
+    );
+    private final ImageView fileIcon = new ImageView (
+            new Image(getClass().getResourceAsStream("file(17x15).png"))
+    );
+
+
 
 
 
@@ -65,35 +86,27 @@ public class Controller implements Initializable {
             input.setText("message canceled - the file or folder is missing");
         } else if (fileName.isEmpty()){
             // обновляем окно если отправлен пустой запрос
-            net.sendFile(new ListRequest("**"));
+            net.sendFile(new RefreshRequest(treeTableView.getSelectionModel().getSelectedItem().getValue().getPath().getFileName()));
         } else {
             if(Files.isDirectory(fileToSend)){
                 //отправляем запрос на переход или созданиеновой директории на сервере
 
-                net.sendFile(new ListRequest(fileName));
+                net.sendFile(new ListRequest(treeTableView.getSelectionModel().getSelectedItem().getValue().getPath().getFileName()));
             }else {
                 // передаём файл
                 long fileSize = Files.size(fileToSend);
                 if(fileSize<= filesPartsSize){//маленький
                     net.sendFile(new FileMessage(fileToSend));
-                    net.sendFile(new ListRequest("**"));
+                    net.sendFile(new RefreshRequest(treeTableView.getSelectionModel().getSelectedItem().getValue().getPath().getFileName()));
                 }else {
                     //большой
                     sendBigFile(fileName, fileToSend, fileSize);
-                    net.sendFile(new ListRequest("**"));
+                    net.sendFile(new RefreshRequest(treeTableView.getSelectionModel().getSelectedItem().getValue().getPath().getFileName()));
 
                 }
                 input.clear();
             }
         }
-
-
-
-
-
-
-
-
     }
 
     private void sendBigFile(String fileName, Path fileToSend, long fileSize) {
@@ -141,84 +154,50 @@ public class Controller implements Initializable {
 
 
         // просим текущую директорию
-        net.sendFile(new ListRequest("*"));
+        net.sendFile(new FirstRequest());// тут запрос корня
+
+
+
 
     }
 
 
 
 
-    private List<String> splitLists(List<String> serverList) throws IOException {
-        //окно примерно 60 знаков .15 знаков служебные условно 45 знаков на строку - фигня получсилась
-        log.debug("cd: "+currentDir );
-        log.debug("ud: "+userDir);
-        //тут объединяем листы чтобы показать их на стол
-        List<String> clientListFiles = Files.list(currentDir)
-                .map(p -> p.getFileName().toString())
-                .collect(Collectors.toList());
 
-
-        for (int i = 0; i < clientListFiles.size(); i++) {
-            if(Files.isDirectory(currentDir.resolve(clientListFiles.get(i)))){
-                clientListFiles.set(i, "[D]:" + clientListFiles.get(i)+":" + fill(clientListFiles.get(i).length()) + ":[c][X]");
-            }else  clientListFiles.set(i, "<f>:" + clientListFiles.get(i)+":" + fill(clientListFiles.get(i).length()) + ":[c][X]");
-
-        }
-        for (int i = 0; i < serverList.size(); i++) {
-
-            String item = serverList.get(i)+":"+fill(serverList.get(i).length()-4) + ":[c][X]";
-            if (clientListFiles.contains(item)) {
-                int index = clientListFiles.indexOf(item);
-                clientListFiles.set(index, serverList.get(i)+":"+fill(serverList.get(i).length()-4) + ":[c][s]");
-            } else clientListFiles.add(serverList.get(i)+":"+fill(serverList.get(i).length()-4) + ":[X][s]");
-        }
-        clientListFiles.sort(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.compareTo(o1);
-            }
-        });
-        if (!currentDir.equals(userDir)){
-            serverList.clear();
-
-            serverList.add("..");
-            serverList.addAll(clientListFiles);
-            return serverList;
-        }
-
-        return clientListFiles;
-
-    }
-    private void refreshTableView(List<String> list){
-        // тут обновляю стол
-        listView.getItems().clear();
-        listView.getItems().addAll(list);
-        listView.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
-                String item = listView.getSelectionModel().getSelectedItem();
-                if(!item.equals(".."))input.setText(item.split(":")[1]);
-                else input.setText(item);
-            }
-        });
-    }
     private void switchCommands(Command s) {
         // тут обрабатываю команды
-
+        log.debug("Income command : {}",s);
 
             switch (s.getType()) {
                 case LIST_RESPONSE:
-                    ListResponse lr = (ListResponse) s;
-                    log.debug("List response contains: {}",lr.getCurrentDir());
-                    if(!lr.getCurrentDir().equals("**")) currentDir = currentDir.resolve(lr.getCurrentDir());
-                    currentDir = currentDir.normalize();
-                    log.debug("Move to dir : {}",currentDir);
 
-                    try {
-                        refreshTableView(splitLists(lr.getFilesList()));
-                    } catch (IOException e) {
-                        log.error("ошибка ВВОДА-ВЫВОДА при попытке обновить стол", e);
+                    ListResponse lr = (ListResponse) s;
+
+                    if(lr.isFirstHandle()) {
+                        log.debug("First Handle");
+                        try {
+                            userDir = ROOT_DIR.resolve(Paths.get(lr.getCurrentDir()).getFileName());
+                            currentDir = ROOT_DIR.resolve(Paths.get(lr.getCurrentDir()).getFileName());
+                            if(!Files.exists(userDir)) Files.createDirectory(userDir);// тут создаёи директорию пользователя
+
+                            createTree(createMergedFilesList(lr.getFilesList(),lr.getFileFolder(), ROOT_DIR.resolve(Paths.get(lr.getCurrentDir()).getFileName())));
+
+                        }catch (Exception e){
+                            log.error("cant create tree",e);
+                        }
+
+                    } else {
+                        log.debug(" Income message " + lr.getCurrentDir() +" : " + currentNode.getValue().getFileName());
+                        try {
+
+                            displayChildrenTree(currentNode,createMergedFilesList(lr.getFilesList(),lr.getFileFolder(), currentDir.resolve(lr.getCurrentDir())));
+                        } catch (IOException e) {
+                            log.error("cant create tree",e);
+                        }
                     }
                     break;
+
                 case FILE_MESSAGE:
                     FileMessage fm = (FileMessage) s;
                     try {
@@ -231,7 +210,7 @@ public class Controller implements Initializable {
                     FileResponse fileResponse = (FileResponse) s;
                     if(fileResponse.isDone()){
                         input.setText(fileResponse.getMessage());
-                        net.sendFile(new ListRequest("**"));
+                        net.sendFile(new RefreshRequest(treeTableView.getSelectionModel().getSelectedItem().getValue().getPath()));
                     }else input.setText(fileResponse.getMessage());
                     break;
 
@@ -240,7 +219,7 @@ public class Controller implements Initializable {
 
 
 
-        }
+    }
 
     private void inFileTransfer(FileMessage command) throws IOException {
         FileMessage inMsg = command;
@@ -255,30 +234,101 @@ public class Controller implements Initializable {
 
         }
     }
-    private String fill (int count){// заполняет пробелы линиями в строках
-        count+=12;
-        if (count<0||count>=line.length()){
-            log.warn("ошибка заполнения строк");
-            return "";
-        }else {
-            return line.substring(count);
+
+
+
+    @FXML
+    private void getInStorage(ActionEvent event) {
+        //тут просим у сервера файл
+
+    }
+    private void createTree(List<FileItem> items){
+        root = new TreeItem<>(new FileItem(userDir,true,true,true),folderIcon);
+        root.setExpanded(true);
+        treeTableView.setRoot(root);
+        filesCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<FileItem,String> p)
+                        ->  new ReadOnlyStringWrapper(p.getValue().getValue().getFileName()) );
+
+
+
+
+        clientStatusCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<FileItem,Boolean> p)
+                        -> new ReadOnlyBooleanWrapper(p.getValue().getValue().isClientStatus()));
+        serverStatusCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<FileItem,Boolean> p)
+                        -> new ReadOnlyBooleanWrapper(p.getValue().getValue().isServerStatus()));
+        treeTableView.setOnMouseClicked(event -> {
+            if(event.getClickCount()==2){
+                String item = treeTableView.getSelectionModel().getSelectedItem().getValue().getFileName();
+                currentNode = treeTableView.getSelectionModel().getSelectedItem();
+                input.setText(item);
+            }
+        });
+
+        displayChildrenTree(root,items);
+
+    }
+    private void displayChildrenTree(TreeItem<FileItem> currentParent,List<FileItem> children){
+        for (int i = 0; i < children.size(); i++) {
+            TreeItem<FileItem> ti = new TreeItem<>((children.get(i)),getCurrentImage(children.get(i).isDir()));
+
+            currentParent.getChildren().add(ti);
         }
+
+    }
+    private ImageView getCurrentImage(boolean isDir){
+        if(isDir) return folderIcon;
+        else return fileIcon;
+
+    }
+    private List<FileItem> createMergedFilesList(List<String> serverListincome,List<Boolean> filefolderServers,Path path) throws IOException {
+        List<FileItem> serverList = toFileItemsList(serverListincome,filefolderServers,true);
+        List<String> clientStringList= Files.list(path).map(p->p.getFileName().toString()).collect(Collectors.toList());
+        List<Boolean> clientFilesFolders = new ArrayList<>();
+        for (int i = 0; i < clientStringList.size(); i++) {
+            clientFilesFolders.add(Files.isDirectory(path.resolve(clientStringList.get(i))));
+        }
+        List<FileItem> clientList = toFileItemsList(clientStringList,clientFilesFolders,false);
+        log.debug(path +" : " + clientList );
+
+        for (int i =0;i<clientList.size();i++){
+            for (int j = 0; j < serverList.size() ; j++) {
+                boolean coincidence = clientList.get(i).getFileName().equals(serverList.get(j).getFileName());
+                if(coincidence){
+                    clientList.get(i).setServerStatus(true);
+                    serverList.remove(j);
+                    break;
+                }
+            }
+        }
+
+        for (FileItem item: serverList) {
+            clientList.add(item);
+
+        }
+        serverList.clear();
+
+        return clientList;
+
     }
 
+    private List<FileItem> toFileItemsList(List<String> serverListincome,List<Boolean> fileFolder,boolean isServersList) {
+        boolean status = false;
+        if(isServersList) status = true;
 
-    public void getInStorage(ActionEvent event) {
-        //тут просим у сервера файл
-        String requestFile = input.getText();
-        String onlyServerHas = "<f>:"+ requestFile +":"+ fill(requestFile.length()) + ":[X][s]";
-        String clientAndServer = "<f>:"+ requestFile+":" + fill(requestFile.length()) + ":[c][s]";
+        log.debug(serverListincome.toString());
+        List<FileItem> result = new ArrayList<>();
+        for (int i = 0; i < serverListincome.size(); i++) {
 
-
-        if(requestFile.equals("..")||!(listView.getItems().contains(onlyServerHas)||listView.getItems().contains(clientAndServer))){
-            //тут не даём скачивать несуществующее
-            log.warn("attempt to download a non-existent file");
-            input.setText("Please, select an existing file");
-        }else {
-            net.sendFile(new FileRequest(requestFile));
+            result.add(new FileItem(Paths.get(serverListincome.get(i)),fileFolder.get(i),!status,status));
         }
+
+        log.debug( result.toString());
+        return result;
+    }
+
+    public void fileOrFolderEdit(TreeTableColumn.CellEditEvent<FileItem, String> fileItemStringCellEditEvent) {
     }
 }

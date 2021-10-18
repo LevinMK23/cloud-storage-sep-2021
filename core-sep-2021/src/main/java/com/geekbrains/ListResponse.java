@@ -3,34 +3,49 @@ package com.geekbrains;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ListResponse extends Command{
     private final List<String> names;
-    String currentDir;
+    private final List<Boolean> fileFolder;
+    String root;
 
-    public ListResponse(Path path,String dir) throws IOException {
+//переделать так чтобы летали простые классы
+
+    boolean isFirstHandle;
+
+    public ListResponse(Path path,boolean isFirstHandle,Path root) throws IOException {
+        this.isFirstHandle = isFirstHandle;
 
         names = Files.list(path).map(p->p.getFileName().toString()).collect(Collectors.toList());
-        // тут добавить префикс - файл - директория
-        for (int i = 0; i< names.size(); i++) {
-            if(Files.isDirectory(path.resolve(names.get(i)))){
-
-                names.set(i,"[D]:"+names.get(i));
-            }else names.set(i,"<f>:"+names.get(i));
-
+        fileFolder = new ArrayList<>();
+        for (int i = 0; i < names.size(); i++) {
+            fileFolder.add(Files.isDirectory(root.resolve(names.get(i))));
         }
-        currentDir = dir;
+
+
+        // где получить корень списка
+        this.root = root.toString();
+        System.out.println(root.getFileName() + " : "+ names.toString());
 
     }
 
     public String getCurrentDir() {
-        return currentDir;
+        return root;
     }
 
     public List<String> getFilesList(){
         return names;
+    }
+
+    public boolean isFirstHandle() {
+        return isFirstHandle;
+    }
+
+    public List<Boolean> getFileFolder() {
+        return fileFolder;
     }
 
     @Override
