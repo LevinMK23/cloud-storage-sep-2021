@@ -5,10 +5,10 @@ import java.nio.file.Path;
 
 public class ListRequest extends Command {
 
-    private String dir ;
+    private String dir ;// тут объект path до васи включая
 
-    public ListRequest(Path dir) {
-        this.dir = dir.toString();
+    public ListRequest(String dir) {
+        this.dir = dir;
     }
 
     public String getDir() {

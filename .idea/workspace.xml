@@ -4,17 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="удалил лишнее, добавил проверку на существование корневой директории">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Перешёл на нормально отображение структуры файлов , к сожалению всё сломалось и перестало работать. Зато выглядеть стало намного лучше. Не работают картинки - исчезают. Скачивание и загрузка тоже.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Net.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/RegistrController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/RegistrController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/chat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/FileMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/FileMessage.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/FileMessage.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/ListResponse.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
@@ -40,7 +39,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="project2" />
+        <entry key="$PROJECT_DIR$" value="project_4_treeTableView" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -79,6 +78,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="" />
       <recent name="com.geekbrains.netty" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -420,7 +420,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634373220981</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Перешёл на нормально отображение структуры файлов , к сожалению всё сломалось и перестало работать. Зато выглядеть стало намного лучше. Не работают картинки - исчезают. Скачивание и загрузка тоже.">
+      <created>1634569664639</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1634569664641</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -469,7 +476,8 @@
     <MESSAGE value="теперь, приложение умеет скачивать файлы с сервера" />
     <MESSAGE value="изменили настройки gitignore" />
     <MESSAGE value="удалил лишнее, добавил проверку на существование корневой директории" />
-    <option name="LAST_COMMIT_MESSAGE" value="удалил лишнее, добавил проверку на существование корневой директории" />
+    <MESSAGE value="Перешёл на нормально отображение структуры файлов , к сожалению всё сломалось и перестало работать. Зато выглядеть стало намного лучше. Не работают картинки - исчезают. Скачивание и загрузка тоже." />
+    <option name="LAST_COMMIT_MESSAGE" value="Перешёл на нормально отображение структуры файлов , к сожалению всё сломалось и перестало работать. Зато выглядеть стало намного лучше. Не работают картинки - исчезают. Скачивание и загрузка тоже." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

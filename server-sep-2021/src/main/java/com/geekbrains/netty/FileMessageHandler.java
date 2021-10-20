@@ -95,12 +95,12 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     FileMessage inMsg = (FileMessage) cmd;
                     if(inMsg.isFirstPart()){
 
-                        Files.write(currentPath.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);
+                        Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);
 
                     }else {
 
 
-                        Files.write(currentPath.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
+                        Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
 
                     }
                     break;
@@ -108,15 +108,15 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     ListRequest lrq = (ListRequest) cmd;
 
                     //тут обрабатываются переходы по папкам
-
-                        if (currentPath.resolve(lrq.getDir()).normalize().startsWith(userPath)){//на всякий случай не разрешаем уйти за папку пользователя
-                            currentPath=currentPath.resolve(lrq.getDir());
+                    log.debug("обработка запроса папки :" + ROOT.resolve(lrq.getDir()).normalize());
+                        if (ROOT.resolve(lrq.getDir()).normalize().startsWith(userPath)){//на всякий случай не разрешаем уйти за папку пользователя
+                            currentPath=ROOT.resolve(lrq.getDir());
 
                             if (!Files.exists(currentPath)) Files.createDirectory(currentPath);
 
                             ctx.writeAndFlush(new ListResponse(currentPath,false, Paths.get(lrq.getDir())));
                             currentPath.normalize();
-                            log.debug("Server send : {}",currentPath,currentPath.getFileName().toString());
+                            log.debug("Server send : {}",currentPath);
                         }
 
 
@@ -124,25 +124,21 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 case FIRST_REQUEST: //обрабатываем первичный запрос на то что есть в папке пользователя на сервере
                     FirstRequest fq = (FirstRequest) cmd;
                     log.debug("First Handle : {}", userPath);
-                    ListResponse listResponse = new ListResponse(userPath,true,userPath);
+                    ListResponse listResponse = new ListResponse(userPath,true,userPath.getFileName());
 
                     ctx.writeAndFlush(listResponse);
 
                     break;
-                case REFRESH_REQUEST:
-                    RefreshRequest rfrq = (RefreshRequest) cmd;
-                    ctx.writeAndFlush(new ListResponse(rfrq.getCurentItem(),false, rfrq.getCurentItem()));
 
-
-                    break;
                 case FILE_REQUEST:
 
                     FileRequest frq = (FileRequest) cmd;
                     String fileName = frq.getFileName();
-                    if(Files.exists(currentPath.resolve(fileName))){
+                    currentPath = ROOT.resolve(fileName);
+                    if(Files.exists(currentPath)){
 
-                        sendFileToClient(currentPath.resolve(fileName),fileName,ctx);
-                        ctx.writeAndFlush(new FileResponse(true,"success..start send file"));
+                        sendFileToClient(currentPath,fileName,ctx);
+                        ctx.writeAndFlush(new FileResponse(true,"success..."));
                     }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
 
                 break;
@@ -153,6 +149,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     }
     private void sendFileToClient(Path fileToSend, String fileName, ChannelHandlerContext ctx) throws IOException {
+
         long fileSize = Files.size(fileToSend);
         if(fileSize<= filesPartsSize){//маленький
             ctx.writeAndFlush(new FileMessage(fileToSend));
@@ -186,6 +183,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
             log.error("Ошибка чтения файла", e);
         }
     }
+
 
 
 }

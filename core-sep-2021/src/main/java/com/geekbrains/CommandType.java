@@ -9,7 +9,7 @@ public enum CommandType {
     LOGIN_RESPONSE,
     REGISTRATION_REQUEST,
     FILE_RESPONSE,
-    FIRST_REQUEST,
-    REFRESH_REQUEST
+    FIRST_REQUEST
+
 
 }

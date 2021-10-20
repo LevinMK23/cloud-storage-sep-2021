@@ -1,14 +1,12 @@
 package com.geekbrains;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FileMessage extends Command {
 
-    private final String name;
+    private final String name;// тут сделать полный путь в папку пользователя вася/блабьлабла
 
     private long size;
 
@@ -20,7 +18,7 @@ public class FileMessage extends Command {
 
     public FileMessage(Path path) throws IOException {
 
-        name = path.getFileName().toString();
+        name = path.subpath(2, path.getNameCount()).toString();
         bytes= Files.readAllBytes(path);
         size = Files.size(path);
         isFirstPart = true;
