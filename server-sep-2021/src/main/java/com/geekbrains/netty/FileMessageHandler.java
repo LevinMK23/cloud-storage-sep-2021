@@ -142,6 +142,22 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                     }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
 
                 break;
+                case DELETE_REQUEST:
+                    DeleteRequest drq = (DeleteRequest) cmd;
+                    log.debug("обработка удаления"+ drq.getPath());
+                    Path path = ROOT.resolve(drq.getPath());
+                    try {
+                        if(Files.isDirectory(path)){
+                            Files.walkFileTree(path, new MyVisitorForDelete());
+                        }else Files.delete(path);
+                        ctx.writeAndFlush(new DeleteResponse("delete success"));
+                    }catch (IOException e){
+                        log.debug("problem when delete file ",e);
+                        ctx.writeAndFlush(new DeleteResponse("Cant delete file"));
+                    }
+
+
+                    break;
 
             }
         }

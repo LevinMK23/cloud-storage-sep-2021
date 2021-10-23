@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="612.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
-    <TextField fx:id="defaultMesages" disable="true" layoutX="10.0" layoutY="549.0" prefHeight="37.0" prefWidth="365.0" />
    <Button fx:id="sendButton" layoutX="386.0" layoutY="549.0" mnemonicParsing="false" onAction="#moveOrSend" prefHeight="37.0" prefWidth="61.0" text="send" AnchorPane.rightAnchor="82.0" />
    <Button fx:id="uploadButton" layoutX="458.0" layoutY="549.0" mnemonicParsing="false" onAction="#getInStorage" prefHeight="37.0" prefWidth="61.0" text="upload" AnchorPane.rightAnchor="10.0" />
    <TreeTableView fx:id="treeTableView" layoutX="10.0" layoutY="94.0" prefHeight="437.0" prefWidth="509.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
@@ -15,7 +14,7 @@
          <TreeTableColumn fx:id="deleteColumn" minWidth="40.0" prefWidth="40.0" resizable="false" sortable="false" text="dell" visible="false" />
      </columns>
    </TreeTableView>
-   <MenuBar layoutX="10.0" layoutY="59.0" prefHeight="25.0" prefWidth="496.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+   <MenuBar layoutX="10.0" layoutY="59.0" prefHeight="25.0" prefWidth="496.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
      <menus>
        <Menu mnemonicParsing="false" text="File">
          <items>
@@ -43,4 +42,7 @@
    <Button fx:id="clientDeleteButton" layoutX="106.0" layoutY="549.0" mnemonicParsing="false" onAction="#clientDelete" prefHeight="37.0" prefWidth="86.0" text="Client del" visible="false" AnchorPane.leftAnchor="107.0" />
    <Button fx:id="serverDeleteButton" layoutX="204.0" layoutY="549.0" mnemonicParsing="false" onAction="#serverDelete" prefHeight="37.0" prefWidth="86.0" text="Server del" visible="false" AnchorPane.leftAnchor="204.0" />
    <Button fx:id="sincSelectedButton" layoutX="314.0" layoutY="549.0" mnemonicParsing="false" onAction="#sincSelected" prefHeight="37.0" prefWidth="61.0" text="Sinc" visible="false" AnchorPane.rightAnchor="154.0" />
+   <Label fx:id="defaultMesages" layoutX="15.0" layoutY="549.0" prefHeight="37.0" prefWidth="366.0" text="defaultLabel" AnchorPane.leftAnchor="10.0" />
+   <Label fx:id="sincLabel" layoutX="14.0" layoutY="549.0" prefHeight="37.0" prefWidth="252.0" text="sincLabel" visible="false" AnchorPane.leftAnchor="10.0" />
+   <Label fx:id="delLabel" layoutX="259.0" layoutY="549.0" prefHeight="37.0" prefWidth="270.0" text="delModeLabel" visible="false" AnchorPane.rightAnchor="10.0" />
 </AnchorPane>

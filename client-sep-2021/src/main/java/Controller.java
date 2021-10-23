@@ -39,7 +39,7 @@ public class Controller implements Initializable {
 
 
 
-    public TextField defaultMesages;
+    public Label defaultMesages;
     private Net net;
     @FXML
     TreeTableView<FileItem> treeTableView;
@@ -74,6 +74,10 @@ public class Controller implements Initializable {
     Button serverDeleteButton;
     @FXML
     Button sincSelectedButton;
+    @FXML
+    Label delLabel;
+    @FXML
+    Label sincLabel;
 
 
 
@@ -112,12 +116,12 @@ public class Controller implements Initializable {
          if(!fullPathToSend.startsWith(userDir)){
             //тут не пускаем пользователя в другие папки
             log.warn("message canceled : no access");
-            defaultMesages.clear();
+
             defaultMesages.setText("message canceled - no access");
         }else if (!Files.exists(fullPathToSend)){
             //не даём отправить несуществующие файлы
             log.warn("message canceled : the file or folder is missing");
-            defaultMesages.clear();
+
             defaultMesages.setText("message canceled - the file or folder is missing");
         }else if(Files.isDirectory(fullPathToSend)){
                 //отправляем запрос на переход или созданиеновой директории на сервере
@@ -141,7 +145,7 @@ public class Controller implements Initializable {
 
                 }
 
-                defaultMesages.clear();
+
             }
         }
 
@@ -168,6 +172,10 @@ public class Controller implements Initializable {
         }catch (Exception e){
             log.error("Ошибка чтения файла", e);
         }
+    }
+    @FXML
+    private void sincSelected(ActionEvent actionEvent){
+
     }
 
     @Override
@@ -251,6 +259,9 @@ public class Controller implements Initializable {
         isDelModeEnabled = newValue;
         sincAll.setVisible(!newValue);
         sincSelected.setVisible(!newValue);
+        defaultMesages.setVisible(!newValue);
+        delLabel.setVisible(newValue);
+        delLabel.setText("выберите файлы для удаления");
 
 
 
@@ -280,39 +291,52 @@ public class Controller implements Initializable {
                         Files.walkFileTree(ROOT_DIR.resolve(fi.getPath()),new MyVisitorForDelete());
                     } catch (IOException e) {
                         log.debug("проблема при удалении папки ",e);
+                        delLabel.setText("что-то пошло не так");
                     }
                 }else {
                     try {
                         Files.delete(ROOT_DIR.resolve(fi.getPath()));
                     } catch (IOException e) {
                         log.debug("проблема при удалении файла ",e);
+                        delLabel.setText("что-то пошло не так");
                     }
                 }
             }
         }
+        net.sendFile(new ListRequest(userDir.toString()));
+
     }
     @FXML
     private void clientDelete(ActionEvent actionEvent){
         List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
+        log.debug(validList.toString());
         int size = validList.size();
+        boolean succsess = true;
         for (int i = 0; i < size; i++){
             FileItem fi = validList.remove(0);
             if(fi.isClientStatus()){
                 if(fi.isDir()){
                     try {
                         Files.walkFileTree(ROOT_DIR.resolve(fi.getPath()),new MyVisitorForDelete());
+                        log.debug("успешно удалено " + fi.getPath());
                     } catch (IOException e) {
                         log.debug("проблема при удалении папки ",e);
+                        succsess = false;
                     }
                 }else {
                     try {
                         Files.delete(ROOT_DIR.resolve(fi.getPath()));
+                        log.debug("успешно удалено " + fi.getPath());
                     } catch (IOException e) {
                         log.debug("проблема при удалении файла ",e);
+                        succsess = false;
                     }
                 }
             }
         }
+        if (succsess) delLabel.setText("всё успешно удалено");
+        net.sendFile(new ListRequest(userDir.toString()));
+
 
     }
     @FXML
@@ -323,6 +347,7 @@ public class Controller implements Initializable {
             FileItem fi = validList.remove(0);
             if(fi.isServerStatus()) net.sendFile(new DeleteRequest(fi.getPath()));
         }
+        net.sendFile(new ListRequest(userDir.toString()));
     }
 
     // тут написать алгоритм отсеивания из списка файлов не входящих в серверные списки или в клиентские списки
@@ -372,9 +397,8 @@ public class Controller implements Initializable {
                 }
                 if(!isCilden)  files.add(fi);//вернули в конец
             }
-            result.addAll(files);
-
         }
+        result.addAll(files);
         folders.clear();
         files.clear();
         return result;
@@ -434,8 +458,13 @@ public class Controller implements Initializable {
                     }else defaultMesages.setText(fileResponse.getMessage());
                     break;
 
+                case DELETE_RESPONSE:
+                    DeleteResponse drs = (DeleteResponse) s;
+                    delLabel.setText(drs.getMessage());
 
+                    break;
                 }
+
 
 
 
@@ -642,10 +671,20 @@ public class Controller implements Initializable {
 
 
         log.debug(listIncome.toString());
+        log.debug(fileFolder.toString());
+
         List<FileItem> result = new ArrayList<>();
         for (int i = 0; i < listIncome.size(); i++) {
-
-            result.add(new FileItem(Paths.get(listIncome.get(i)),fileFolder.get(i),!isServersList,isServersList));
+            Path path =Paths.get(listIncome.get(i));
+            Path fullPath =ROOT_DIR.resolve(path);
+            if (fileFolder.get(i)&&!Files.exists(fullPath)) {
+                try {
+                    Files.createDirectory(fullPath);
+                } catch (IOException e) {
+                    log.debug("не смог создать папку" + fullPath);
+                }
+            }
+            result.add(new FileItem(path,fileFolder.get(i),!isServersList,isServersList));
         }
 
         log.debug( result.toString());

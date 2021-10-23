@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Полностью рабочая версия приложения, которое умеет передавать файлы на сервер и забирать с сервера файлы, и выглядит прилично. Далее буду добавлять возможность удаления файлов и возможность добавления файлов в папку юзера">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_10_2021_4_13_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_10_2021_4_13__Default_Changelist_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_10_2021_4_15_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_10_2021_4_15__Default_Changelist_.xml" beforeDir="false" />
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="закончил клиентскую сторону удаления, осталось настроить удаление на сервере и обработку ответа от сервера на клиенте">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/ListResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -430,7 +427,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634762506137</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="закончил клиентскую сторону удаления, осталось настроить удаление на сервере и обработку ответа от сервера на клиенте">
+      <created>1634999828220</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1634999828220</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -481,7 +485,8 @@
     <MESSAGE value="удалил лишнее, добавил проверку на существование корневой директории" />
     <MESSAGE value="Перешёл на нормально отображение структуры файлов , к сожалению всё сломалось и перестало работать. Зато выглядеть стало намного лучше. Не работают картинки - исчезают. Скачивание и загрузка тоже." />
     <MESSAGE value="Полностью рабочая версия приложения, которое умеет передавать файлы на сервер и забирать с сервера файлы, и выглядит прилично. Далее буду добавлять возможность удаления файлов и возможность добавления файлов в папку юзера" />
-    <option name="LAST_COMMIT_MESSAGE" value="Полностью рабочая версия приложения, которое умеет передавать файлы на сервер и забирать с сервера файлы, и выглядит прилично. Далее буду добавлять возможность удаления файлов и возможность добавления файлов в папку юзера" />
+    <MESSAGE value="закончил клиентскую сторону удаления, осталось настроить удаление на сервере и обработку ответа от сервера на клиенте" />
+    <option name="LAST_COMMIT_MESSAGE" value="закончил клиентскую сторону удаления, осталось настроить удаление на сервере и обработку ответа от сервера на клиенте" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -490,6 +495,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java</url>
+          <line>356</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

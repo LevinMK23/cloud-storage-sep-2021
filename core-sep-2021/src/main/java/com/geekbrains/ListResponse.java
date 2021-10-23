@@ -23,15 +23,21 @@ public class ListResponse extends Command{
 
 // необходимо передавать полные пути
         names = Files.list(path).map(p->p.subpath(2,p.getNameCount()).toString()).collect(Collectors.toList());//заменил на полный путь
+        Path rootPath = path.subpath(0,2);
+        System.out.println(rootPath);
+
         fileFolder = new ArrayList<>();
         for (int i = 0; i < names.size(); i++) {
-            fileFolder.add(Files.isDirectory(root.resolve(Paths.get(names.get(i))).getFileName()));
+            fileFolder.add(Files.isDirectory(rootPath.resolve(names.get(i))));//менял тут
         }
-
+        System.out.println(root.toString());
+        System.out.println(path.toString());
+        System.out.println(fileFolder.toString());
+        System.out.println(names.toString());
 
         // где получить корень списка
         this.root = root.toString();
-        System.out.println(root.getFileName() + " : "+ names.toString());
+
 
     }
 
