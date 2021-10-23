@@ -303,6 +303,7 @@ public class Controller implements Initializable {
                 }
             }
         }
+
         net.sendFile(new ListRequest(userDir.toString()));
 
     }
