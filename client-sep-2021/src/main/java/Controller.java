@@ -1,10 +1,7 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -13,12 +10,17 @@ import com.geekbrains.*;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -37,7 +39,7 @@ public class Controller implements Initializable {
 
 
 
-    public TextField input;
+    public TextField defaultMesages;
     private Net net;
     @FXML
     TreeTableView<FileItem> treeTableView;
@@ -47,6 +49,33 @@ public class Controller implements Initializable {
     TreeTableColumn<FileItem,Boolean> serverStatusCol;
     @FXML
     TreeTableColumn<FileItem,String> filesCol;
+    @FXML
+    TreeTableColumn<FileItem,Boolean> deleteColumn;
+
+    @FXML
+    CheckMenuItem serverOnlyDeleteItem;
+    @FXML
+    CheckMenuItem clientOnlyDeleteItem;
+    @FXML
+    CheckMenuItem enableDeleteMode;
+    @FXML
+    Button sendButton;
+    @FXML
+    Button uploadButton;
+    @FXML
+    CheckMenuItem sincAll;
+    @FXML
+    CheckMenuItem sincSelected;
+    @FXML
+    Button delAllButton;
+    @FXML
+    Button clientDeleteButton;
+    @FXML
+    Button serverDeleteButton;
+    @FXML
+    Button sincSelectedButton;
+
+
 
     TreeItem<FileItem> root;
     TreeItem<FileItem> currentNode;
@@ -60,6 +89,10 @@ public class Controller implements Initializable {
     private final Image fileIcon =
             new Image(getClass().getResourceAsStream("file(17x15).png"));
 
+    boolean isDelModeEnabled = false;
+    private LinkedList<FileItem> foldersToDelete = new LinkedList<>();
+    private LinkedList<FileItem> filesToDelete = new LinkedList<>();
+
 
 
 
@@ -70,7 +103,7 @@ public class Controller implements Initializable {
     private void moveOrSend(ActionEvent actionEvent) throws IOException {
 
 
-        String fileName = input.getText();
+        String fileName = defaultMesages.getText();
 
         Path fileToSend = this.pathToSend;
         Path fullPathToSend = ROOT_DIR.resolve(fileToSend.normalize());
@@ -79,17 +112,17 @@ public class Controller implements Initializable {
          if(!fullPathToSend.startsWith(userDir)){
             //тут не пускаем пользователя в другие папки
             log.warn("message canceled : no access");
-            input.clear();
-            input.setText("message canceled - no access");
+            defaultMesages.clear();
+            defaultMesages.setText("message canceled - no access");
         }else if (!Files.exists(fullPathToSend)){
             //не даём отправить несуществующие файлы
             log.warn("message canceled : the file or folder is missing");
-            input.clear();
-            input.setText("message canceled - the file or folder is missing");
+            defaultMesages.clear();
+            defaultMesages.setText("message canceled - the file or folder is missing");
         }else if(Files.isDirectory(fullPathToSend)){
                 //отправляем запрос на переход или созданиеновой директории на сервере
                 net.sendFile(new ListRequest(getStringPathForSend()));
-                input.setText("Обновил папку");
+                defaultMesages.setText("Обновил папку");
          }else {
                 // передаём файл
                 long fileSize = Files.size(fullPathToSend);
@@ -108,7 +141,7 @@ public class Controller implements Initializable {
 
                 }
 
-                input.clear();
+                defaultMesages.clear();
             }
         }
 
@@ -161,12 +194,193 @@ public class Controller implements Initializable {
         // просим текущую директорию
         net.sendFile(new FirstRequest());// тут запрос корня
 
+        //слушатель для мода удаления
+
+        enableDeleteMode.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+                log.debug("in enableDelMode setting params");
+
+                clientOnlyDeleteItem.setVisible(oldValue);
+                serverOnlyDeleteItem.setVisible(oldValue);
+                delAllButton.setVisible(newValue);
+
+                deleteMethodSetup(newValue);
+            }
+        });
+        clientOnlyDeleteItem.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+                log.debug("in clientOnlyDelMode setting params");
+
+                enableDeleteMode.setVisible(oldValue);
+                serverOnlyDeleteItem.setVisible(oldValue);
+                clientDeleteButton.setVisible(newValue);
+
+                deleteMethodSetup(newValue);
+            }
+        });
+        serverOnlyDeleteItem.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+                log.debug("in serverOnlyDelMode setting params");
+
+                enableDeleteMode.setVisible(oldValue);
+                clientOnlyDeleteItem.setVisible(oldValue);
+                serverDeleteButton.setVisible(newValue);
+
+                deleteMethodSetup(newValue);
+            }
+        });
+
 
 
 
     }
 
+    private void deleteMethodSetup(boolean newValue){
+        // при включяении мода удаления необходимо закрыть доступ
+        // к элементам управления синхронизацией и посылок
 
+        deleteColumn.setVisible(newValue);
+        sendButton.setVisible(!newValue);
+        uploadButton.setVisible(!newValue);
+        isDelModeEnabled = newValue;
+        sincAll.setVisible(!newValue);
+        sincSelected.setVisible(!newValue);
+
+
+
+        if(!newValue){
+            // тут чистим расстрельные списки если в них что-то осталось а из делейт мода мы вышли
+            for(FileItem fi : foldersToDelete){
+                fi.setToDelete(false);
+            }
+            for(FileItem fi : filesToDelete){
+                fi.setToDelete(false);
+            }
+            foldersToDelete.clear();
+            filesToDelete.clear();
+        }
+
+    }
+    @FXML
+    private void delAll(ActionEvent actionEvent){
+       List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
+        int size = validList.size();
+        for (int i = 0; i < size; i++){
+            FileItem fi = validList.remove(0);
+            if(fi.isServerStatus()) net.sendFile(new DeleteRequest(fi.getPath()));
+            if(fi.isClientStatus()){
+                if(fi.isDir()){
+                    try {
+                        Files.walkFileTree(ROOT_DIR.resolve(fi.getPath()),new MyVisitorForDelete());
+                    } catch (IOException e) {
+                        log.debug("проблема при удалении папки ",e);
+                    }
+                }else {
+                    try {
+                        Files.delete(ROOT_DIR.resolve(fi.getPath()));
+                    } catch (IOException e) {
+                        log.debug("проблема при удалении файла ",e);
+                    }
+                }
+            }
+        }
+    }
+    @FXML
+    private void clientDelete(ActionEvent actionEvent){
+        List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
+        int size = validList.size();
+        for (int i = 0; i < size; i++){
+            FileItem fi = validList.remove(0);
+            if(fi.isClientStatus()){
+                if(fi.isDir()){
+                    try {
+                        Files.walkFileTree(ROOT_DIR.resolve(fi.getPath()),new MyVisitorForDelete());
+                    } catch (IOException e) {
+                        log.debug("проблема при удалении папки ",e);
+                    }
+                }else {
+                    try {
+                        Files.delete(ROOT_DIR.resolve(fi.getPath()));
+                    } catch (IOException e) {
+                        log.debug("проблема при удалении файла ",e);
+                    }
+                }
+            }
+        }
+
+    }
+    @FXML
+    private void serverDelete(ActionEvent actionEvent){
+        List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
+        int size = validList.size();
+        for (int i = 0; i < size; i++){
+            FileItem fi = validList.remove(0);
+            if(fi.isServerStatus()) net.sendFile(new DeleteRequest(fi.getPath()));
+        }
+    }
+
+    // тут написать алгоритм отсеивания из списка файлов не входящих в серверные списки или в клиентские списки
+    private List<FileItem> validateDelete(List<FileItem> folders, List<FileItem> files){
+        // тут написать алгоритм проверки списков на удаление
+        // предназначен для того чтобы сократить количество запросов на сервер и к жёсткому диску компа
+        LinkedList<FileItem> result = new LinkedList<>();
+        for (int i = 0; i < folders.size(); i++){//
+            if(result.size()>0){
+                FileItem fi = folders.remove(0);
+                FileItem current = null;
+                boolean isCilden = false;
+                boolean isParent = false;
+                for (FileItem f : result){
+                    if(fi.getPath().startsWith(f.getPath())){
+                        isCilden = true;
+                        break;
+                    }
+                    if(f.getPath().startsWith(fi.getPath())){
+                        isParent = true;
+                        current = f;
+                        break;
+                    }
+                }
+                if(isParent){
+                    result.remove(current);
+                    result.add(fi);
+                }else if(!isCilden){
+                    result.add(fi);
+                }
+
+
+            }else result.add(folders.remove(0));
+
+        }
+        int count = files.size();
+        for (int i = 0; i < count;i++){
+
+            if(result.size()>0){
+                FileItem fi = files.remove(0);
+                boolean isCilden = false;
+                for (FileItem f : result){
+                    if(fi.getPath().startsWith(f.getPath())){
+                        isCilden = true;
+                        break;
+                    }
+                }
+                if(!isCilden)  files.add(fi);//вернули в конец
+            }
+            result.addAll(files);
+
+        }
+        folders.clear();
+        files.clear();
+        return result;
+
+
+    }
 
 
 
@@ -214,10 +428,10 @@ public class Controller implements Initializable {
                 case FILE_RESPONSE:
                     FileResponse fileResponse = (FileResponse) s;
                     if(fileResponse.isDone()){
-                        input.setText(fileResponse.getMessage());
+                        defaultMesages.setText(fileResponse.getMessage());
                         String toSend = getStringPathForSend(true);
                         net.sendFile(new ListRequest(toSend));
-                    }else input.setText(fileResponse.getMessage());
+                    }else defaultMesages.setText(fileResponse.getMessage());
                     break;
 
 
@@ -248,7 +462,7 @@ public class Controller implements Initializable {
         //тут просим у сервера файл
                 log.debug("request for file : "+ pathToSend.toString());
                 net.sendFile(new FileRequest(pathToSend.toString()));
-                input.setText(pathToSend.getFileName()+" : request send");
+                defaultMesages.setText(pathToSend.getFileName()+" : request send");
 
     }
     private void createTree(List<FileItem> items){
@@ -257,37 +471,124 @@ public class Controller implements Initializable {
         treeTableView.setRoot(root);
 
 
-        filesCol.setCellValueFactory(
-                (TreeTableColumn.CellDataFeatures<FileItem,String> p)
-                        -> new ReadOnlyStringWrapper(p.getValue().getValue().getFileName()));
 
-        clientStatusCol.setCellValueFactory(
-                (TreeTableColumn.CellDataFeatures<FileItem,Boolean> p)
-                        -> new ReadOnlyBooleanWrapper(p.getValue().getValue().isClientStatus()));
-        serverStatusCol.setCellValueFactory(
-                (TreeTableColumn.CellDataFeatures<FileItem,Boolean> p)
-                        -> new ReadOnlyBooleanWrapper(p.getValue().getValue().isServerStatus()));
+        treeEventHandler();
+
+        serverStatusEventHandler();
+        clientStatusEventHandler();
+        deleteEventHandler();
 
 
 //https://betacode.net/11149/javafx-treetableview
 
-        treeTableView.setOnMouseClicked(event -> {
-            if(event.getClickCount()==2){
-                String item = treeTableView.getSelectionModel().getSelectedItem().getValue().getFileName();
-                currentNode = treeTableView.getSelectionModel().getSelectedItem();
-
-
-                pathToSend = currentNode.getValue().getPath();
-                log.debug("pathTosend :" + pathToSend.toString());
-                if(Files.isDirectory(ROOT_DIR.resolve(pathToSend))) net.sendFile(new ListRequest(pathToSend.toString()));
-                else input.setText("Отправить на сервер этот файл ? :" + item);
-            }
-        });
+        setOnMousClickedOneRow();
 
 
         displayChildrenTree(root,items);
 
     }
+
+    private void deleteEventHandler() {
+        deleteColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<FileItem, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TreeTableColumn.CellDataFeatures<FileItem, Boolean> param) {
+                log.debug("in callback for checkbox ");
+                TreeItem<FileItem> ti = param.getValue();
+                FileItem fi = ti.getValue();
+                SimpleBooleanProperty sbp = new SimpleBooleanProperty(fi.isToDelete());
+                sbp.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+                        fi.setToDelete(newValue);
+                        log.debug("listener for checkbox : "+ fi.isToDelete());
+
+                    }
+                });
+
+                return sbp;// проверить коректность работы
+            }
+        });
+        deleteColumn.setCellFactory(p -> {
+            CheckBox checkBox = new CheckBox();
+            TreeTableCell<FileItem, Boolean> cell = new TreeTableCell<FileItem, Boolean>() {
+                @Override
+                public void updateItem(Boolean item, boolean empty) {
+
+                    if (empty) {
+                        setGraphic(null);
+
+                    } else {
+
+                        checkBox.setSelected(item);
+                        setGraphic(checkBox);
+
+                    }
+                }
+            };
+            checkBox.selectedProperty().addListener((obs, wasSelected, isSelected) ->{
+
+                  FileItem fi =  (FileItem)cell.getTreeTableRow().getItem();
+                  if(ROOT_DIR.resolve(fi.getPath()).equals(userDir)){
+                      log.debug("cant setToDelete user dir");
+                  }else {
+                      fi.setToDelete(isSelected);
+                      if(fi.isDir()) {
+                          if(isSelected ){
+                              foldersToDelete.add(fi);
+                          }else foldersToDelete.remove(fi);
+                      } else {
+                          if(isSelected){
+                              filesToDelete.add(fi);
+                          }else {
+                              filesToDelete.remove(fi);
+                          }
+                      }
+                      log.debug(fi.getFileName() + " : cb : changed to : " + isSelected );
+                  }
+
+
+            });
+            cell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            cell.setAlignment(Pos.CENTER);
+            return cell ;
+        });
+    }
+
+    private void clientStatusEventHandler() {
+        serverStatusCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<FileItem,Boolean> p)
+                        -> new ReadOnlyBooleanWrapper(p.getValue().getValue().isServerStatus()));
+    }
+
+    private void serverStatusEventHandler() {
+        clientStatusCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<FileItem,Boolean> p)
+                        -> new ReadOnlyBooleanWrapper(p.getValue().getValue().isClientStatus()));
+    }
+
+    private void treeEventHandler() {
+        filesCol.setCellValueFactory(
+                (TreeTableColumn.CellDataFeatures<FileItem,String> p)
+                        -> new ReadOnlyStringWrapper(p.getValue().getValue().getFileName()));
+    }
+
+    private void setOnMousClickedOneRow() {
+        treeTableView.setOnMouseClicked(event -> {
+            if(event.getClickCount()==2){
+                String item = treeTableView.getSelectionModel().getSelectedItem().getValue().getFileName();
+                currentNode = treeTableView.getSelectionModel().getSelectedItem();
+
+                if (isDelModeEnabled) currentNode.getValue().setToDelete(true);
+
+                pathToSend = currentNode.getValue().getPath();
+                log.debug("pathTosend :" + pathToSend.toString());
+                if(Files.isDirectory(ROOT_DIR.resolve(pathToSend))) net.sendFile(new ListRequest(pathToSend.toString()));
+                else defaultMesages.setText("Отправить на сервер этот файл ? :" + item);
+            }
+        });
+    }
+
     private void displayChildrenTree(TreeItem<FileItem> currentParent,List<FileItem> children){
         currentParent.getChildren().clear();
         for (int i = 0; i < children.size(); i++) {
@@ -372,4 +673,7 @@ public class Controller implements Initializable {
     private String getStringSubPath(Path path){
         return path.subpath(2, path.getNameCount()).toString();
     }
+
+
+
 }

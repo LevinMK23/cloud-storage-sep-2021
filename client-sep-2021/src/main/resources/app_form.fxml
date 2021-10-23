@@ -3,16 +3,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="488.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
-    <TextField fx:id="input" layoutX="14.0" layoutY="439.0" prefHeight="37.0" prefWidth="239.0" />
-   <Button layoutX="263.0" layoutY="445.0" mnemonicParsing="false" onAction="#moveOrSend" prefHeight="25.0" prefWidth="114.0" text="send" />
-   <Button layoutX="389.0" layoutY="445.0" mnemonicParsing="false" onAction="#getInStorage" prefHeight="25.0" prefWidth="114.0" text="upload" />
-   <TreeTableView fx:id="treeTableView" layoutX="15.0" layoutY="14.0" prefHeight="415.0" prefWidth="496.0">
+<AnchorPane prefHeight="612.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <TextField fx:id="defaultMesages" disable="true" layoutX="10.0" layoutY="549.0" prefHeight="37.0" prefWidth="365.0" />
+   <Button fx:id="sendButton" layoutX="386.0" layoutY="549.0" mnemonicParsing="false" onAction="#moveOrSend" prefHeight="37.0" prefWidth="61.0" text="send" AnchorPane.rightAnchor="82.0" />
+   <Button fx:id="uploadButton" layoutX="458.0" layoutY="549.0" mnemonicParsing="false" onAction="#getInStorage" prefHeight="37.0" prefWidth="61.0" text="upload" AnchorPane.rightAnchor="10.0" />
+   <TreeTableView fx:id="treeTableView" layoutX="10.0" layoutY="94.0" prefHeight="437.0" prefWidth="509.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
      <columns>
-       <TreeTableColumn fx:id="filesCol" onEditCommit="#fileOrFolderEdit" prefWidth="358.0" text="files" />
-         <TreeTableColumn fx:id="clientStatusCol" editable="false" prefWidth="46.0" text="client " />
-         <TreeTableColumn fx:id="serverStatusCol" editable="false" prefWidth="45.0" text="server" />
-         <TreeTableColumn fx:id="serverStatusCol1" editable="false" prefWidth="46.0" sortable="false" text="dell" />
+       <TreeTableColumn fx:id="filesCol" onEditCommit="#fileOrFolderEdit" prefWidth="377.0" text="files" />
+         <TreeTableColumn fx:id="clientStatusCol" editable="false" minWidth="40.0" prefWidth="40.0" resizable="false" text="client " />
+         <TreeTableColumn fx:id="serverStatusCol" editable="false" minWidth="40.0" prefWidth="40.0" resizable="false" text="server" />
+         <TreeTableColumn fx:id="deleteColumn" minWidth="40.0" prefWidth="40.0" resizable="false" sortable="false" text="dell" visible="false" />
      </columns>
    </TreeTableView>
+   <MenuBar layoutX="10.0" layoutY="59.0" prefHeight="25.0" prefWidth="496.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+     <menus>
+       <Menu mnemonicParsing="false" text="File">
+         <items>
+               <MenuItem mnemonicParsing="false" text="Add files to Cloud" />
+               <MenuItem mnemonicParsing="false" text="Get files from cloud" />
+           <MenuItem mnemonicParsing="false" text="Close" />
+         </items>
+       </Menu>
+         <Menu mnemonicParsing="false" text="Delete Mode">
+           <items>
+               <CheckMenuItem fx:id="enableDeleteMode" mnemonicParsing="false" text="Enable full delete mode" />
+               <CheckMenuItem fx:id="serverOnlyDeleteItem" mnemonicParsing="false" text="Server only delete" />
+               <CheckMenuItem fx:id="clientOnlyDeleteItem" mnemonicParsing="false" text="Client only delete" />
+           </items>
+         </Menu>
+         <Menu mnemonicParsing="false" text="Sinc">
+           <items>
+               <CheckMenuItem fx:id="sincAll" mnemonicParsing="false" text="Sinc ALL" />
+               <CheckMenuItem fx:id="sincSelected" mnemonicParsing="false" text="Sinc Selected" />
+           </items>
+         </Menu>
+     </menus>
+   </MenuBar>
+   <Button fx:id="delAllButton" layoutX="10.0" layoutY="549.0" mnemonicParsing="false" onAction="#delAll" prefHeight="37.0" prefWidth="86.0" text="del ALL" visible="false" AnchorPane.leftAnchor="10.0" />
+   <Button fx:id="clientDeleteButton" layoutX="106.0" layoutY="549.0" mnemonicParsing="false" onAction="#clientDelete" prefHeight="37.0" prefWidth="86.0" text="Client del" visible="false" AnchorPane.leftAnchor="107.0" />
+   <Button fx:id="serverDeleteButton" layoutX="204.0" layoutY="549.0" mnemonicParsing="false" onAction="#serverDelete" prefHeight="37.0" prefWidth="86.0" text="Server del" visible="false" AnchorPane.leftAnchor="204.0" />
+   <Button fx:id="sincSelectedButton" layoutX="314.0" layoutY="549.0" mnemonicParsing="false" onAction="#sincSelected" prefHeight="37.0" prefWidth="61.0" text="Sinc" visible="false" AnchorPane.rightAnchor="154.0" />
 </AnchorPane>
