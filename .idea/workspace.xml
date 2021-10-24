@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Похоже что мод удаления работает, дальше тестить не буду, время поджимает уже">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/RegistrController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/RegistrController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/registr_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/registr_form.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/src/main/java/com/geekbrains/CommandType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/target/classes/com/geekbrains/CommandType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,9 +20,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Enum" />
         <option value="Interface" />
+        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
@@ -461,7 +453,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635076859582</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно.">
+      <created>1635083320904</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1635083320904</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -516,7 +515,8 @@
     <MESSAGE value="настроено удаление, есть баг, папочки не удаляются.. настраиваем" />
     <MESSAGE value="Делейт мод работает , но папки пока удаляются плохо, продумать этто, также надо изменить интерфейс и пора начать заниматься синхронизацией." />
     <MESSAGE value="Похоже что мод удаления работает, дальше тестить не буду, время поджимает уже" />
-    <option name="LAST_COMMIT_MESSAGE" value="Похоже что мод удаления работает, дальше тестить не буду, время поджимает уже" />
+    <MESSAGE value="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно." />
+    <option name="LAST_COMMIT_MESSAGE" value="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -16,10 +16,10 @@
    </TreeTableView>
    <MenuBar layoutX="10.0" layoutY="59.0" prefHeight="25.0" prefWidth="496.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
      <menus>
-       <Menu mnemonicParsing="false" text="File">
+       <Menu mnemonicParsing="false" text="Files">
          <items>
-               <MenuItem mnemonicParsing="false" text="Add files to Cloud" />
-               <MenuItem mnemonicParsing="false" text="Get files from cloud" />
+               <MenuItem fx:id="UDmenuItem" mnemonicParsing="false" text="Upload / Dounload" />
+               <MenuItem mnemonicParsing="false" onAction="#createNewFolder" text="Create new folder" />
            <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
          </items>
        </Menu>

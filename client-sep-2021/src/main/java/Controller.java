@@ -15,8 +15,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -38,6 +40,7 @@ public class Controller implements Initializable {
     }
     private Path currentDir =ROOT_DIR;// меняем
     private Path userDir = ROOT_DIR;// корневая папка юзера
+
 
 
 
@@ -818,7 +821,89 @@ public class Controller implements Initializable {
 
 
     }
+    @FXML
+    private void createNewFolder(){
+       FileItem fi = treeTableView.getSelectionModel().getSelectedItem().getValue();
+       Path p = ROOT_DIR.resolve(fi.getPath());
+       openCreateFolderWindow();
 
+
+
+    }
+
+    private void openCreateFolderWindow() {
+
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("create_new_folder.fxml"));
+//        try {
+//            Parent parent = fxmlLoader.load();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Stage stage = new Stage();
+//        stage.setTitle(" создаём папку ");
+        TextInputDialog dialog = new TextInputDialog("Create");
+
+        dialog.setTitle("New Folder");
+        dialog.setHeaderText("Enter folders name:");
+        dialog.setContentText("Name:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(name -> {
+            createFolder(name);
+
+        });
+
+    }
+
+    private void createFolder(String newFileName) {
+        FileItem fi = treeTableView.getSelectionModel().getSelectedItem().getValue();
+        Path p = ROOT_DIR.resolve(fi.getPath());
+
+        try {
+            if(Files.isDirectory(p)){
+                p = p.resolve(newFileName);
+                Files.createDirectory(p);
+                Path toFileitem = fi.getPath().resolve(newFileName);
+                treeTableView.getSelectionModel()
+                        .getSelectedItem().getChildren()
+                        .add(new TreeItem<>(new FileItem(toFileitem,true,true,false),new ImageView(folderIcon)));
+            }else {
+                p= p.getParent().resolve(newFileName);
+                Files.createDirectory(p);
+                Path toFileitem = fi.getPath().getParent().resolve(newFileName);
+                treeTableView.getSelectionModel()
+                        .getSelectedItem().getParent()
+                        .getChildren().add(new TreeItem<>(new FileItem(toFileitem,true,true,false),new ImageView(folderIcon)));
+            }
+
+        }catch (IOException e){
+            log.debug("cant create dir");
+        }
+    }
+    private void goToUploadScene(){
+
+        Scene scene = treeTableView.getScene();
+
+        Stage stage = (Stage) scene.getWindow();
+        stage.setOnHidden(e->log.debug(" сменили метод зарытия "));
+        stage.hide();
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("upload_form.fxml"));
+            Parent parent = fxmlLoader.load();
+            UfController controller = fxmlLoader.getController();
+            stage.setOnHidden(e-> controller.backToMainWindow());
+            stage.setTitle("Выберите файлы для загрузки в облако");
+
+            stage.setScene(new Scene(parent));
+            stage.show();
+
+        } catch (IOException e) {
+            log.error("cant open new window",e);
+        }
+    }
 
 
 }
