@@ -96,6 +96,7 @@ public class Controller implements Initializable {
     boolean isDelModeEnabled = false;
     private LinkedList<FileItem> foldersToDelete = new LinkedList<>();
     private LinkedList<FileItem> filesToDelete = new LinkedList<>();
+    private LinkedList<Path> rootsToRefresh = new LinkedList<>();
 
 
 
@@ -281,10 +282,13 @@ public class Controller implements Initializable {
     @FXML
     private void delAll(ActionEvent actionEvent){
        List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
+        List<String> stringsPaths = new LinkedList<>();
         int size = validList.size();
         for (int i = 0; i < size; i++){
-            FileItem fi = validList.remove(0);
-            if(fi.isServerStatus()) net.sendFile(new DeleteRequest(fi.getPath()));
+            FileItem fi = validList.get(i);
+            if(fi.isServerStatus()) {
+                stringsPaths.add(fi.getPath().toString());
+            }
             if(fi.isClientStatus()){
                 if(fi.isDir()){
                     try {
@@ -303,10 +307,25 @@ public class Controller implements Initializable {
                 }
             }
         }
+        log.debug("send to server DELETE ALL : "+ stringsPaths.toString());
+        net.sendFile(new DeleteRequest(stringsPaths));
+        validList.clear();
+        refreshTreeView();
 
-        net.sendFile(new ListRequest(userDir.toString()));
 
     }
+
+    private void refreshTreeView() {
+//        int rootListSize = rootsToRefresh.size();
+//        for (int i =0; i<rootListSize ; i++){
+//            net.sendFile(new ListRequest(rootsToRefresh.get(0).toString()));
+//        }
+//        rootsToRefresh.clear();
+        root.getChildren().clear();
+        log.debug("refresh in delete mode _____ "+ userDir);
+        net.sendFile(new ListRequest(userDir.subpath(2,3).toString()));
+    }
+
     @FXML
     private void clientDelete(ActionEvent actionEvent){
         List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
@@ -314,7 +333,7 @@ public class Controller implements Initializable {
         int size = validList.size();
         boolean succsess = true;
         for (int i = 0; i < size; i++){
-            FileItem fi = validList.remove(0);
+            FileItem fi = validList.get(0);
             if(fi.isClientStatus()){
                 if(fi.isDir()){
                     try {
@@ -336,70 +355,47 @@ public class Controller implements Initializable {
             }
         }
         if (succsess) delLabel.setText("всё успешно удалено");
-        net.sendFile(new ListRequest(userDir.toString()));
+        validList.clear();
+        refreshTreeView();
 
 
     }
     @FXML
     private void serverDelete(ActionEvent actionEvent){
         List<FileItem> validList = validateDelete(foldersToDelete,filesToDelete);
+        List<String> stringsPaths = new LinkedList<>();
         int size = validList.size();
-        for (int i = 0; i < size; i++){
-            FileItem fi = validList.remove(0);
-            if(fi.isServerStatus()) net.sendFile(new DeleteRequest(fi.getPath()));
+        for (int i =0; i<size;i++){
+            FileItem fi = validList.get(i);
+            if(fi.isServerStatus()) stringsPaths.add(fi.getPath().toString());// тут отправляем строки на удаление
         }
-        net.sendFile(new ListRequest(userDir.toString()));
+        log.debug("DELETE prepare for send : " + stringsPaths.toString());
+        net.sendFile(new DeleteRequest(stringsPaths));
+
+        refreshTreeView();
     }
 
     // тут написать алгоритм отсеивания из списка файлов не входящих в серверные списки или в клиентские списки
-    private List<FileItem> validateDelete(List<FileItem> folders, List<FileItem> files){
+    private List<FileItem> validateDelete(LinkedList<FileItem> folders, LinkedList<FileItem> files){
         // тут написать алгоритм проверки списков на удаление
         // предназначен для того чтобы сократить количество запросов на сервер и к жёсткому диску компа
         LinkedList<FileItem> result = new LinkedList<>();
-        for (int i = 0; i < folders.size(); i++){//
-            if(result.size()>0){
-                FileItem fi = folders.remove(0);
-                FileItem current = null;
-                boolean isCilden = false;
-                boolean isParent = false;
-                for (FileItem f : result){
-                    if(fi.getPath().startsWith(f.getPath())){
-                        isCilden = true;
-                        break;
-                    }
-                    if(f.getPath().startsWith(fi.getPath())){
-                        isParent = true;
-                        current = f;
-                        break;
-                    }
-                }
-                if(isParent){
-                    result.remove(current);
-                    result.add(fi);
-                }else if(!isCilden){
-                    result.add(fi);
-                }
+        filterFolders(folders, result);
+        filterFiles(folders, files, result);// на выходе результ заполнен папками и файлами
 
-
-            }else result.add(folders.remove(0));
-
+        // ещё 100 милионов строк говнокода и я у цели
+        log.debug("________________________filter_____________________________");
+        for (FileItem f : result){
+            log.debug("result contains {}",f.getPath().toString());
         }
-        int count = files.size();
-        for (int i = 0; i < count;i++){
 
-            if(result.size()>0){
-                FileItem fi = files.remove(0);
-                boolean isCilden = false;
-                for (FileItem f : result){
-                    if(fi.getPath().startsWith(f.getPath())){
-                        isCilden = true;
-                        break;
-                    }
-                }
-                if(!isCilden)  files.add(fi);//вернули в конец
-            }
-        }
-        result.addAll(files);
+
+//        for(int i = 0; i< result.size();i++){
+//            Path p = result.get(i).getPath().getParent();
+//            if(!rootsToRefresh.contains(p))rootsToRefresh.add(p);
+//        }
+//        log.debug("roots contains {} ",rootsToRefresh.toString());
+
         folders.clear();
         files.clear();
         return result;
@@ -407,7 +403,102 @@ public class Controller implements Initializable {
 
     }
 
+    private void filterFolders(LinkedList<FileItem> folders, LinkedList<FileItem> result) {
+        for (int i = 0; i < folders.size(); i++){//фильтр
+            if(result.size()>1){
+                FileItem fi = folders.get(i);
+                boolean isParent = false;
+                boolean isCild = false;
+                LinkedList<FileItem> toRemoveFromList = new LinkedList<>();
+                int resultSize = result.size();
+                for (int j = 0; j < resultSize ; j++) {
+                    Path resultsPath= result.get(j).getPath();
+                    Path folder = fi.getPath();
+                    int lenthItem = resultsPath.getNameCount();
+                    int lenthFi = folder.getNameCount();
+                    Path isShort = null;
+                    if(lenthItem==lenthFi){
+                        if(folder.equals(resultsPath)) {// ОТСЕИВАЕМ ОДИНАКОВЫЕ
+                            isParent = true;
+                            break;
+                        }
+                    }else if(lenthItem>lenthFi){// путь к папке короче
+                        isShort = cutPaths(resultsPath,lenthItem-lenthFi);
+                        if(isShort.equals(folder)) {// он парент надо убрать возможных детей из листа
+                            toRemoveFromList.add(result.get(j));
+                            if(!isParent) result.addFirst(fi);// тут смотри если косяк
+                            isParent = true;
 
+                        }
+                    }else{// короче тот который уже в результатах
+                        isShort = cutPaths(folder,lenthFi-lenthItem);
+                        if(isShort.equals(folder)) {// он чилдрен
+                            isCild = true;
+                            break;
+                        }
+                    }
+
+                }
+                if(!isParent) result.add(fi);//добавили его если он нигде не был чилдреном или парентом
+                else if(!isCild){
+                    //чистим резалт от детей и добавляем парента
+                    for (FileItem f : toRemoveFromList){
+                        result.remove(f);
+                    }
+                    toRemoveFromList.clear();
+                    result.add(fi);
+                }
+
+
+            }else result.add(folders.get(i));
+
+        }
+        folders.clear();
+        folders.addAll(result);// результат вернули в папки
+        result.clear();
+    }
+
+    private void filterFiles(LinkedList<FileItem> folders, LinkedList<FileItem> files, LinkedList<FileItem> result) {
+        int count = files.size();
+        for (int i = 0; i < count;i++){
+            FileItem fi = files.get(i);
+
+            if(folders.size()>0){//переписать todo фильтр плохо фильтрует
+                boolean isCilden = false;
+                for (FileItem f : folders){
+                    Path parent = fi.getPath().getParent();
+                    Path folder = f.getPath();
+                    int parentSize = parent.getNameCount();
+                    int folderSize = folder.getNameCount();
+                    if(parentSize>=folderSize){
+                        Path test = cutPaths(parent,parentSize-folderSize);
+                        if(test.equals(folder)){
+                            isCilden=true;
+                            break;
+                        }
+                    }
+
+                }
+                if(!isCilden&&!result.contains(fi)) result.add(fi);
+
+
+            }else {
+                result.addAll(files);
+                break;
+            }
+
+        }
+        result.addAll(folders);
+    }
+
+    private Path cutPaths(Path path, int forCut){
+
+        Path result =path.subpath(0,path.getNameCount()-forCut);
+        log.debug(path.toString() + " : " +forCut+" : " + result);
+
+       return result;
+
+    }
 
     private void switchCommands(Command s) {
         // тут обрабатываю команды

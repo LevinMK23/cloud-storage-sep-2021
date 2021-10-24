@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.*;
 import java.sql.ResultSet;
+import java.util.List;
 
 import com.geekbrains.*;
 import io.netty.channel.ChannelHandlerContext;
@@ -144,17 +145,26 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                 break;
                 case DELETE_REQUEST:
                     DeleteRequest drq = (DeleteRequest) cmd;
-                    log.debug("обработка удаления"+ drq.getPath());
-                    Path path = ROOT.resolve(drq.getPath());
-                    try {
-                        if(Files.isDirectory(path)){
-                            Files.walkFileTree(path, new MyVisitorForDelete());
-                        }else Files.delete(path);
-                        ctx.writeAndFlush(new DeleteResponse("delete success"));
-                    }catch (IOException e){
-                        log.debug("problem when delete file ",e);
-                        ctx.writeAndFlush(new DeleteResponse("Cant delete file"));
+                    List<String> list = drq.getPaths();
+                    log.debug("обработка удаления"+ list.toString());
+                    int size = list.size();
+                    boolean isDone = true;
+                    for (int i =0; i< size; i++){
+                        Path path = ROOT.resolve(list.get(i));
+                        try {
+                            if(Files.isDirectory(path)){
+                                Files.walkFileTree(path, new MyVisitorForDelete());
+                            }else Files.delete(path);
+
+                        }catch (IOException e){
+                            log.debug("problem when delete file ",e);
+
+                            isDone = false;
+                        }
                     }
+                    if(isDone) ctx.writeAndFlush(new DeleteResponse("delete success"));
+                    else ctx.writeAndFlush(new DeleteResponse("Cant delete file"));
+                    list.clear();
 
 
                     break;

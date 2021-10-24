@@ -38,11 +38,11 @@
          </Menu>
      </menus>
    </MenuBar>
-   <Button fx:id="delAllButton" layoutX="10.0" layoutY="549.0" mnemonicParsing="false" onAction="#delAll" prefHeight="37.0" prefWidth="86.0" text="del ALL" visible="false" AnchorPane.leftAnchor="10.0" />
-   <Button fx:id="clientDeleteButton" layoutX="106.0" layoutY="549.0" mnemonicParsing="false" onAction="#clientDelete" prefHeight="37.0" prefWidth="86.0" text="Client del" visible="false" AnchorPane.leftAnchor="107.0" />
-   <Button fx:id="serverDeleteButton" layoutX="204.0" layoutY="549.0" mnemonicParsing="false" onAction="#serverDelete" prefHeight="37.0" prefWidth="86.0" text="Server del" visible="false" AnchorPane.leftAnchor="204.0" />
-   <Button fx:id="sincSelectedButton" layoutX="314.0" layoutY="549.0" mnemonicParsing="false" onAction="#sincSelected" prefHeight="37.0" prefWidth="61.0" text="Sinc" visible="false" AnchorPane.rightAnchor="154.0" />
-   <Label fx:id="defaultMesages" layoutX="15.0" layoutY="549.0" prefHeight="37.0" prefWidth="366.0" text="defaultLabel" AnchorPane.leftAnchor="10.0" />
-   <Label fx:id="sincLabel" layoutX="14.0" layoutY="549.0" prefHeight="37.0" prefWidth="252.0" text="sincLabel" visible="false" AnchorPane.leftAnchor="10.0" />
-   <Label fx:id="delLabel" layoutX="259.0" layoutY="549.0" prefHeight="37.0" prefWidth="270.0" text="delModeLabel" visible="false" AnchorPane.rightAnchor="10.0" />
+   <Button fx:id="delAllButton" layoutX="458.0" layoutY="549.0" mnemonicParsing="false" onAction="#delAll" prefHeight="37.0" prefWidth="61.0" text="del ALL" visible="false" AnchorPane.rightAnchor="10.0" />
+   <Button fx:id="clientDeleteButton" layoutX="386.0" layoutY="549.0" mnemonicParsing="false" onAction="#clientDelete" prefHeight="37.0" prefWidth="61.0" text="Client del" visible="false" AnchorPane.rightAnchor="82.0" />
+   <Button fx:id="serverDeleteButton" layoutX="386.0" layoutY="549.0" mnemonicParsing="false" onAction="#serverDelete" prefHeight="37.0" prefWidth="61.0" text="Server del" visible="false" AnchorPane.rightAnchor="82.0" />
+   <Button fx:id="sincSelectedButton" layoutX="458.0" layoutY="549.0" mnemonicParsing="false" onAction="#sincSelected" prefHeight="37.0" prefWidth="61.0" text="Sinc" visible="false" AnchorPane.rightAnchor="10.0" />
+   <Label fx:id="defaultMesages" layoutX="10.0" layoutY="549.0" prefHeight="37.0" prefWidth="366.0" text="Ваши вайлы находячтся тут :" AnchorPane.leftAnchor="10.0" />
+   <Label fx:id="sincLabel" layoutX="14.0" layoutY="549.0" prefHeight="37.0" prefWidth="366.0" text="Выберите файлы для синхронизации :" visible="false" AnchorPane.leftAnchor="10.0" />
+   <Label fx:id="delLabel" layoutX="259.0" layoutY="549.0" prefHeight="37.0" prefWidth="366.0" text="Выберите файлы для удаления :" visible="false" AnchorPane.leftAnchor="10.0" />
 </AnchorPane>
