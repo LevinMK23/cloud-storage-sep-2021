@@ -45,13 +45,20 @@ public class ClientFileMessageHandler extends SimpleChannelInboundHandler<Comman
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Command command) throws Exception {
         log.debug("received : {}",command.toString());
 
+        if(command.getType().equals(CommandType.DISCONNECT_RESPONCE)){
+            log.debug("disconnect....");
 
-        if(!isLogin){
-            login(command);
-
+            channelHandlerContext.channel().closeFuture();
+            channelHandlerContext.close();
         }else {
-            callback.call(command);
+            if(!isLogin){
+                login(command);
+
+            }else {
+                callback.call(command);
+            }
         }
+
 
 
     }

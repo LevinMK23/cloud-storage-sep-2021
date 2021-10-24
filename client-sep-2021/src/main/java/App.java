@@ -8,8 +8,14 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent parent = FXMLLoader.load(getClass().getResource("login_form.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login_form.fxml"));
+        Parent parent = fxmlLoader.load();
+        LoginController loginController = fxmlLoader.getController();
+        primaryStage.setOnHidden(e->loginController.onClose());
+        primaryStage.setTitle("Авторизация");
+
         primaryStage.setScene(new Scene(parent));
+
 
         primaryStage.show();
     }

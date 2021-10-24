@@ -1,4 +1,5 @@
 import com.geekbrains.CommandType;
+import com.geekbrains.DisconnectRequest;
 import com.geekbrains.LoginResponse;
 import com.geekbrains.RegistrationRequest;
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import sun.rmi.runtime.NewThreadAction;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,18 +36,25 @@ public class RegistrController implements Initializable {
         Button button = (Button) actionEvent.getSource();
 
         Stage stage = (Stage)button.getScene().getWindow();
+        stage.setOnHidden(e->log.debug(" сменили метод зарытия "));
         stage.hide();
 
-        Parent parent = null;
+
         try {
-            parent = FXMLLoader.load(getClass().getResource("login_form.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login_form.fxml"));
+            Parent parent = fxmlLoader.load();
+            LoginController loginController = fxmlLoader.getController();
+            stage.setOnHidden(e->loginController.onClose());
+            stage.setTitle("Авторизация");
+
+            stage.setScene(new Scene(parent));
+
+            stage.show();
         } catch (IOException e) {
             log.error("cant open new window",e);
         }
 
-        stage.setScene(new Scene(parent));
 
-        stage.show();
     }
 
     @FXML
@@ -82,18 +91,29 @@ public class RegistrController implements Initializable {
 
         Scene scene = passFieldReg.getScene();
         Stage stage = (Stage) scene.getWindow();
+        stage.setOnHidden(e->log.debug(" сменили метод зарытия "));
         stage.hide();
-        Parent parent = null;
+
         try {
-            parent = FXMLLoader.load(getClass().getResource("app_form.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("app_form.fxml"));
+            Parent  parent = fxmlLoader.load();
+            Controller controller = fxmlLoader.getController();
+            stage.setOnHidden(e->controller.closeApp());
+            stage.setTitle("Облако");
+            stage.setScene(new Scene(parent));
+            stage.show();
         } catch (IOException e) {
             log.error("cant open new window",e);
         }
 
-        stage.setScene(new Scene(parent));
-        stage.show();
 
 
+
+
+    }
+    public void onClose(){
+        log.debug("on close");
+        net.sendFile(new DisconnectRequest());
     }
 
 }

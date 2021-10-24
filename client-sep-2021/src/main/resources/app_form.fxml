@@ -20,7 +20,7 @@
          <items>
                <MenuItem mnemonicParsing="false" text="Add files to Cloud" />
                <MenuItem mnemonicParsing="false" text="Get files from cloud" />
-           <MenuItem mnemonicParsing="false" text="Close" />
+           <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
          </items>
        </Menu>
          <Menu mnemonicParsing="false" text="Delete Mode">

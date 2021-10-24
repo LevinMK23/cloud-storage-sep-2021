@@ -1,4 +1,5 @@
 import com.geekbrains.CommandType;
+import com.geekbrains.DisconnectRequest;
 import com.geekbrains.LoginRequest;
 import com.geekbrains.LoginResponse;
 import javafx.application.Platform;
@@ -32,16 +33,24 @@ public class LoginController implements Initializable {
         Button button = (Button) actionEvent.getSource();
 
         Stage stage = (Stage)button.getScene().getWindow();
+        stage.setOnHidden(e->log.debug(" сменили метод зарытия "));
         stage.hide();
 
-        Parent parent = null;
+
         try {
-            parent = FXMLLoader.load(getClass().getResource("registr_form.fxml"));
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("registr_form.fxml"));
+            Parent parent = fxmlLoader.load();
+            RegistrController rc = fxmlLoader.getController();
+            stage.setScene(new Scene(parent));
+            stage.setOnHidden(e-> rc.onClose());
+            stage.setTitle("Регистрация нового пользователя");
+
         } catch (IOException e) {
             log.error("cant open new window",e);
         }
 
-        stage.setScene(new Scene(parent));
+
 
         stage.show();
 
@@ -72,18 +81,30 @@ public class LoginController implements Initializable {
                    Scene scene = passField.getScene();
 
                    Stage stage = (Stage) scene.getWindow();
+                   stage.setOnHidden(e->log.debug(" сменили метод зарытия "));
                    stage.hide();
-                    Parent parent = null;
+
                     try {
-                        parent = FXMLLoader.load(getClass().getResource("app_form.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("app_form.fxml"));
+                        Parent parent = fxmlLoader.load();
+                        Controller controller = fxmlLoader.getController();
+                        stage.setOnHidden(e-> controller.closeApp());
+                        stage.setTitle("Облако");
+
+                        stage.setScene(new Scene(parent));
+                        stage.show();
+
                     } catch (IOException e) {
                         log.error("cant open new window",e);
                     }
 
-                    stage.setScene(new Scene(parent));
-                    stage.show();
 
 
+
+    }
+    public void onClose(){
+        log.debug("on close");
+        net.sendFile(new DisconnectRequest());
     }
 }
 

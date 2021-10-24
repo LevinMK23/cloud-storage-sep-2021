@@ -38,78 +38,79 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
             }
         }
 
-        if (!isLogin){
+        if (!cmd.getType().equals(CommandType.DISCONNECT_REQUEST)){
+            if (!isLogin){
 
-            if(cmd.getType().equals(CommandType.LOGIN_REQUEST)){
-                LoginRequest loginCommand = (LoginRequest) cmd;
+                if(cmd.getType().equals(CommandType.LOGIN_REQUEST)){
+                    LoginRequest loginCommand = (LoginRequest) cmd;
 
-                ResultSet resultSet = SQLHandler.getUserFromDb(loginCommand.getLogin(),loginCommand.getPass());
-                if(!resultSet.isBeforeFirst()) {
-                    ctx.writeAndFlush(new LoginResponse(false,""));
+                    ResultSet resultSet = SQLHandler.getUserFromDb(loginCommand.getLogin(),loginCommand.getPass());
+                    if(!resultSet.isBeforeFirst()) {
+                        ctx.writeAndFlush(new LoginResponse(false,""));
 
 
-                }else {
-                    resultSet.next();
-                    log.debug("Db response contains");
-
-                    while (!resultSet.isAfterLast()){
-                        log.debug(" str : " + resultSet.getString("id")+ " : " + resultSet.getString("user_name"));
+                    }else {
                         resultSet.next();
+                        log.debug("Db response contains");
+
+                        while (!resultSet.isAfterLast()){
+                            log.debug(" str : " + resultSet.getString("id")+ " : " + resultSet.getString("user_name"));
+                            resultSet.next();
+                        }
+                        userDir = loginCommand.getLogin();
+                        currentPath = ROOT.resolve(userDir);
+                        userPath = ROOT.resolve(userDir);
+
+                        ctx.writeAndFlush(new LoginResponse(true,userDir));
+
+                        isLogin = true;
+
                     }
-                    userDir = loginCommand.getLogin();
-                    currentPath = ROOT.resolve(userDir);
-                    userPath = ROOT.resolve(userDir);
 
-                    ctx.writeAndFlush(new LoginResponse(true,userDir));
+                }else if(cmd.getType().equals(CommandType.REGISTRATION_REQUEST)){
+                    RegistrationRequest reg = (RegistrationRequest) cmd;
 
-                    isLogin = true;
+                    if(SQLHandler.createNewUser(reg.getUserName(),reg.getPass())){
+                        userDir =reg.getUserName();
+
+                        currentPath = ROOT.resolve(userDir);
+                        userPath = ROOT.resolve(userDir);
+
+                        System.out.println("NEW USER REGISTRED " + userDir );
+                        isLogin = true;
+
+                        ctx.writeAndFlush(new LoginResponse(true,userDir));
+                    }else ctx.writeAndFlush(new LoginResponse(false,""));
+
+
+
+
+                }else{
+                    ctx.writeAndFlush(new LoginResponse(false,""));
 
                 }
 
-            }else if(cmd.getType().equals(CommandType.REGISTRATION_REQUEST)){
-                RegistrationRequest reg = (RegistrationRequest) cmd;
+            }else {
 
-                if(SQLHandler.createNewUser(reg.getUserName(),reg.getPass())){
-                    userDir =reg.getUserName();
+                switch (cmd.getType()) {
+                    case FILE_MESSAGE:// посмотреть возможность замены моей логики на chunked file на клиентскую и серверную сторону
+                        FileMessage inMsg = (FileMessage) cmd;
+                        if(inMsg.isFirstPart()){
 
-                    currentPath = ROOT.resolve(userDir);
-                    userPath = ROOT.resolve(userDir);
+                            Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);
 
-                    System.out.println("NEW USER REGISTRED " + userDir );
-                    isLogin = true;
-
-                    ctx.writeAndFlush(new LoginResponse(true,userDir));
-                }else ctx.writeAndFlush(new LoginResponse(false,""));
+                        }else {
 
 
+                            Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
 
+                        }
+                        break;
+                    case LIST_REQUEST:
+                        ListRequest lrq = (ListRequest) cmd;
 
-            }else{
-                ctx.writeAndFlush(new LoginResponse(false,""));
-
-            }
-
-        }else {
-
-            switch (cmd.getType()) {
-                case FILE_MESSAGE:// посмотреть возможность замены моей логики на chunked file на клиентскую и серверную сторону
-                    FileMessage inMsg = (FileMessage) cmd;
-                    if(inMsg.isFirstPart()){
-
-                        Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(),StandardOpenOption.CREATE);
-
-                    }else {
-
-
-                        Files.write(ROOT.resolve(inMsg.getName()),inMsg.getBytes(), StandardOpenOption.APPEND );
-
-                    }
-                    break;
-                case LIST_REQUEST:
-                    ListRequest lrq = (ListRequest) cmd;
-
-                    //тут обрабатываются переходы по папкам
-                    log.debug("обработка запроса папки :" + ROOT.resolve(lrq.getDir()).normalize());
+                        //тут обрабатываются переходы по папкам
+                        log.debug("обработка запроса папки :" + ROOT.resolve(lrq.getDir()).normalize());
                         if (ROOT.resolve(lrq.getDir()).normalize().startsWith(userPath)){//на всякий случай не разрешаем уйти за папку пользователя
                             currentPath=ROOT.resolve(lrq.getDir());
 
@@ -121,55 +122,62 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
                         }
 
 
-                    break;
-                case FIRST_REQUEST: //обрабатываем первичный запрос на то что есть в папке пользователя на сервере
-                    FirstRequest fq = (FirstRequest) cmd;
-                    log.debug("First Handle : {}", userPath);
-                    ListResponse listResponse = new ListResponse(userPath,true,userPath.getFileName());
+                        break;
+                    case FIRST_REQUEST: //обрабатываем первичный запрос на то что есть в папке пользователя на сервере
+                        FirstRequest fq = (FirstRequest) cmd;
+                        log.debug("First Handle : {}", userPath);
+                        ListResponse listResponse = new ListResponse(userPath,true,userPath.getFileName());
 
-                    ctx.writeAndFlush(listResponse);
+                        ctx.writeAndFlush(listResponse);
 
-                    break;
+                        break;
 
-                case FILE_REQUEST:
+                    case FILE_REQUEST:
 
-                    FileRequest frq = (FileRequest) cmd;
-                    String fileName = frq.getFileName();
-                    currentPath = ROOT.resolve(fileName);
-                    if(Files.exists(currentPath)){
+                        FileRequest frq = (FileRequest) cmd;
+                        String fileName = frq.getFileName();
+                        currentPath = ROOT.resolve(fileName);
+                        if(Files.exists(currentPath)){
 
-                        sendFileToClient(currentPath,fileName,ctx);
-                        ctx.writeAndFlush(new FileResponse(true,"success..."));
-                    }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
+                            sendFileToClient(currentPath,fileName,ctx);
+                            ctx.writeAndFlush(new FileResponse(true,"success..."));
+                        }else ctx.writeAndFlush(new FileResponse(false,"unsuccessful..cant find file"));
 
-                break;
-                case DELETE_REQUEST:
-                    DeleteRequest drq = (DeleteRequest) cmd;
-                    List<String> list = drq.getPaths();
-                    log.debug("обработка удаления"+ list.toString());
-                    int size = list.size();
-                    boolean isDone = true;
-                    for (int i =0; i< size; i++){
-                        Path path = ROOT.resolve(list.get(i));
-                        try {
-                            if(Files.isDirectory(path)){
-                                Files.walkFileTree(path, new MyVisitorForDelete());
-                            }else Files.delete(path);
+                        break;
+                    case DELETE_REQUEST:
+                        DeleteRequest drq = (DeleteRequest) cmd;
+                        List<String> list = drq.getPaths();
+                        log.debug("обработка удаления"+ list.toString());
+                        int size = list.size();
+                        boolean isDone = true;
+                        for (int i =0; i< size; i++){
+                            Path path = ROOT.resolve(list.get(i));
+                            try {
+                                if(Files.isDirectory(path)){
+                                    Files.walkFileTree(path, new MyVisitorForDelete());
+                                }else Files.delete(path);
 
-                        }catch (IOException e){
-                            log.debug("problem when delete file ",e);
+                            }catch (IOException e){
+                                log.debug("problem when delete file ",e);
 
-                            isDone = false;
+                                isDone = false;
+                            }
                         }
-                    }
-                    if(isDone) ctx.writeAndFlush(new DeleteResponse("delete success"));
-                    else ctx.writeAndFlush(new DeleteResponse("Cant delete file"));
-                    list.clear();
+                        if(isDone) ctx.writeAndFlush(new DeleteResponse("delete success"));
+                        else ctx.writeAndFlush(new DeleteResponse("Cant delete file"));
+                        list.clear();
 
 
-                    break;
+                        break;
 
+
+                }
             }
+        }else {//обрабатываем дисконект
+            log.debug("послал ответ ");
+            ctx.writeAndFlush(new DisconnectResponse());
+            ctx.close();
+
         }
 
 
