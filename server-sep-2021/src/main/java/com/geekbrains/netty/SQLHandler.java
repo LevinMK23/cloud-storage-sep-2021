@@ -22,11 +22,18 @@ public class SQLHandler {
     }
     public static Connection createConnection() throws ClassNotFoundException, SQLException {
 
-        String con = "jdbc:mysql://localhost:3306/users";
 
-        Class.forName("com.mysql.jdbc.Driver");
 
-        connection = DriverManager.getConnection(con,"root","36963aqz");
+        Class.forName("org.sqlite.JDBC");
+
+        connection = DriverManager.getConnection("jdbc:sqlite:users.db");
+        Statement statement = connection.createStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.executeUpdate("CREATE table IF NOT EXISTS users_table (id INTEGER PRIMARY KEY AUTOINCREMENT, user_name TEXT UNIQUE , pass TEXT)");
+
+
+
+
         return connection;
     }
     public static boolean createNewUser(String userName, String pass) throws IOException, SQLException {// добавить проверку на уникальность имени в базе
@@ -55,7 +62,7 @@ public class SQLHandler {
             } catch (Exception e) {
                 log.error("cant create new user", e);
             }
-            Files.createDirectory(userPath);
+            if(!Files.exists(userPath))Files.createDirectory(userPath);
             return true;
         }else return false;
 
