@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Теперь мы умеем загружать папки в прэкт и выгружать из проэкта">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Перевёл проэкт на sqlite">
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core-sep-2021/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server-sep-2021/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/SQLHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/SQLHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server-sep-2021/src/main/java/com/geekbrains/netty/FileMessageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +47,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
   </component>
   <component name="ProjectId" id="1yEOwWJOBtzkhfhlPI7GomsQYVt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -474,7 +482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635158032479</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Перевёл проэкт на sqlite">
+      <created>1635162057754</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1635162057754</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -505,7 +520,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="исправлены ошибки, теперь файл передаётся на сервер" />
     <MESSAGE value="проблема передачи больших файлов решена, но потрачена куча памяти... Решение требует доработки." />
     <MESSAGE value="Удалил ссауты для дебага" />
     <MESSAGE value="новая ветка для сдачи домашнего задания" />
@@ -530,7 +544,8 @@
     <MESSAGE value="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно." />
     <MESSAGE value="Умеем создавать папки, в процессе создается таблица загрузок" />
     <MESSAGE value="Теперь мы умеем загружать папки в прэкт и выгружать из проэкта" />
-    <option name="LAST_COMMIT_MESSAGE" value="Теперь мы умеем загружать папки в прэкт и выгружать из проэкта" />
+    <MESSAGE value="Перевёл проэкт на sqlite" />
+    <option name="LAST_COMMIT_MESSAGE" value="Перевёл проэкт на sqlite" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

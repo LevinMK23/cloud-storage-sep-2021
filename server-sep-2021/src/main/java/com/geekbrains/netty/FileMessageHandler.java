@@ -1,5 +1,6 @@
 package com.geekbrains.netty;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.*;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("server-sep-2021", "root");
+    private static final Path SEREVER_DIR = Paths.get("server-sep-2021");
     private static Path currentPath = null;
     private static String userDir;
     private boolean isLogin = false;
@@ -32,6 +34,7 @@ public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
         // TODO: 23.09.2021 Разработка системы команд
         if(!Files.exists(ROOT)) {
             try {
+                if(!Files.exists(SEREVER_DIR)) Files.createDirectory(SEREVER_DIR);
                 Files.createDirectory(ROOT);
             } catch (IOException e) {
                 log.error("Cant create root dir!",e);

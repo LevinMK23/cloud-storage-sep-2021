@@ -35,6 +35,7 @@ import static javafx.stage.Modality.WINDOW_MODAL;
 public class Controller implements Initializable {
 
     private static Path ROOT_DIR = Paths.get("client-sep-2021","root");
+    private static Path CLIENT_DIR = Paths.get("client-sep-2021");
     private final long filesPartsSize = 100000;
 
 
@@ -192,6 +193,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         if(!Files.exists(ROOT_DIR)) {
             try {
+                if(!Files.exists(CLIENT_DIR)) Files.createDirectory(CLIENT_DIR);
                 Files.createDirectory(ROOT_DIR);
             } catch (IOException e) {
                 log.error("Cant create root dir!",e);

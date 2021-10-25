@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 public class ClientFileMessageHandler extends SimpleChannelInboundHandler<Command> {
 
     private static final Path ROOT = Paths.get("client-sep-2021", "root");
+    private static Path CLIENT_DIR = Paths.get("client-sep-2021");
     public static Path getCurPath() {
         return curPath;
     }
@@ -72,7 +73,11 @@ public class ClientFileMessageHandler extends SimpleChannelInboundHandler<Comman
             if(lr.isValid()){
                 isLogin=true;
                 curPath = ROOT.resolve(lr.getUserName());
-                if(!Files.exists(curPath)) Files.createDirectory(curPath);
+                if(!Files.exists(curPath)) {
+                    if(!Files.exists(CLIENT_DIR))Files.createDirectory(CLIENT_DIR);
+                    if(!Files.exists(ROOT))Files.createDirectory(ROOT);
+                    Files.createDirectory(curPath);
+                }
                 callback.call(lr);// вызывает закрытие сцены авторизации или регистрации
 
 
