@@ -18,7 +18,7 @@
      <menus>
        <Menu mnemonicParsing="false" text="Files">
          <items>
-               <MenuItem fx:id="UDmenuItem" mnemonicParsing="false" text="Upload / Dounload" />
+               <MenuItem fx:id="UDmenuItem" mnemonicParsing="false" onAction="#goToUploadScene" text="Upload / Dounload" />
                <MenuItem mnemonicParsing="false" onAction="#createNewFolder" text="Create new folder" />
            <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
          </items>

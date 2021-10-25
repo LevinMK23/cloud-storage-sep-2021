@@ -31,7 +31,7 @@ public class ClientFileMessageHandler extends SimpleChannelInboundHandler<Comman
     }
 
     private Callback callback;
-    private Controller controller = null;
+
 
     public ClientFileMessageHandler(Callback callback,boolean isLogin) {
 
@@ -74,15 +74,7 @@ public class ClientFileMessageHandler extends SimpleChannelInboundHandler<Comman
                 curPath = ROOT.resolve(lr.getUserName());
                 if(!Files.exists(curPath)) Files.createDirectory(curPath);
                 callback.call(lr);// вызывает закрытие сцены авторизации или регистрации
-                if(controller==null) {
-                    Platform.runLater(()->{
-                        controller = Controller.getController();
 
-
-                    });
-
-
-                }
 
                 //установили папку пользователя (больше не меняется)
             }

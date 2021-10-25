@@ -23,23 +23,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 
+import static javafx.stage.Modality.WINDOW_MODAL;
 
 
 @Slf4j
 public class Controller implements Initializable {
 
-    private static Path ROOT_DIR = Paths.get("client-sep-2021/root");
+    private static Path ROOT_DIR = Paths.get("client-sep-2021","root");
     private final long filesPartsSize = 100000;
-    private static Controller controller;
-    public static Controller getController() {
-        return controller;
-    }
+
+
     private Path currentDir =ROOT_DIR;// меняем
-    private Path userDir = ROOT_DIR;// корневая папка юзера
+    private static Path userDir = ROOT_DIR;// корневая папка юзера
 
 
 
@@ -87,8 +87,11 @@ public class Controller implements Initializable {
 
 
 
-    TreeItem<FileItem> root;
-    TreeItem<FileItem> currentNode;
+    private TreeItem<FileItem> root;
+
+
+
+    private static TreeItem<FileItem> currentNode;
 
     private Path pathToSend = null;
 
@@ -102,7 +105,7 @@ public class Controller implements Initializable {
     boolean isDelModeEnabled = false;
     private LinkedList<FileItem> foldersToDelete = new LinkedList<>();
     private LinkedList<FileItem> filesToDelete = new LinkedList<>();
-    private LinkedList<Path> rootsToRefresh = new LinkedList<>();
+
 
 
 
@@ -182,7 +185,7 @@ public class Controller implements Initializable {
     }
     @FXML
     private void sincSelected(ActionEvent actionEvent){
-
+        // TODO: 25.10.2021 сделать синхронизацию
     }
 
     @Override
@@ -194,7 +197,8 @@ public class Controller implements Initializable {
                 log.error("Cant create root dir!",e);
             }
         }
-        controller = this;
+
+
         log.debug("________client started___________");
 
 
@@ -322,11 +326,7 @@ public class Controller implements Initializable {
     }
 
     private void refreshTreeView() {
-//        int rootListSize = rootsToRefresh.size();
-//        for (int i =0; i<rootListSize ; i++){
-//            net.sendFile(new ListRequest(rootsToRefresh.get(0).toString()));
-//        }
-//        rootsToRefresh.clear();
+
         root.getChildren().clear();
         log.debug("refresh in delete mode _____ "+ userDir);
         net.sendFile(new ListRequest(userDir.subpath(2,3).toString()));
@@ -395,12 +395,7 @@ public class Controller implements Initializable {
             log.debug("result contains {}",f.getPath().toString());
         }
 
-
-//        for(int i = 0; i< result.size();i++){
-//            Path p = result.get(i).getPath().getParent();
-//            if(!rootsToRefresh.contains(p))rootsToRefresh.add(p);
-//        }
-//        log.debug("roots contains {} ",rootsToRefresh.toString());
+        // TODO: 24.10.2021 добавить алгоритм составления запросов на обновление папок, чтобы изменения происходили интерактивно
 
         folders.clear();
         files.clear();
@@ -469,7 +464,7 @@ public class Controller implements Initializable {
         for (int i = 0; i < count;i++){
             FileItem fi = files.get(i);
 
-            if(folders.size()>0){//переписать todo фильтр плохо фильтрует
+            if(folders.size()>0){
                 boolean isCilden = false;
                 for (FileItem f : folders){
                     Path parent = fi.getPath().getParent();
@@ -567,7 +562,9 @@ public class Controller implements Initializable {
 
 
     }
-
+    public static TreeItem<FileItem> getCurrentNode() {
+        return currentNode;
+    }
     private void inFileTransfer(FileMessage command) throws IOException {
         FileMessage inMsg = command;
         if(inMsg.isFirstPart()){
@@ -790,6 +787,8 @@ public class Controller implements Initializable {
     }
     @FXML
     private void fileOrFolderEdit(TreeTableColumn.CellEditEvent<FileItem, String> fileItemStringCellEditEvent) {
+        // TODO: 24.10.2021 добавить возморжность переименования файлов и папок
+
     }
 
     private String getStringPathForSend(){// использовать для вынимания подготовленого пути из айтема
@@ -833,15 +832,7 @@ public class Controller implements Initializable {
 
     private void openCreateFolderWindow() {
 
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("create_new_folder.fxml"));
-//        try {
-//            Parent parent = fxmlLoader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Stage stage = new Stage();
-//        stage.setTitle(" создаём папку ");
+
         TextInputDialog dialog = new TextInputDialog("Create");
 
         dialog.setTitle("New Folder");
@@ -882,6 +873,7 @@ public class Controller implements Initializable {
             log.debug("cant create dir");
         }
     }
+    @FXML
     private void goToUploadScene(){
 
         Scene scene = treeTableView.getScene();
@@ -893,11 +885,14 @@ public class Controller implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("upload_form.fxml"));
             Parent parent = fxmlLoader.load();
-            UfController controller = fxmlLoader.getController();
-            stage.setOnHidden(e-> controller.backToMainWindow());
+            UfController ufController = fxmlLoader.getController();
+            stage.setOnHidden(e-> ufController.backToMainWindow());
+
             stage.setTitle("Выберите файлы для загрузки в облако");
 
+
             stage.setScene(new Scene(parent));
+
             stage.show();
 
         } catch (IOException e) {
@@ -905,5 +900,7 @@ public class Controller implements Initializable {
         }
     }
 
-
+    public static Path getUserDir() {
+        return userDir;
+    }
 }

@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно.">
+    <list default="true" id="adbe6abf-e6da-44b1-a25a-79e7b7d6dd21" name="Default Changelist" comment="Умеем создавать папки, в процессе создается таблица загрузок">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/ClientFileMessageHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/java/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client-sep-2021/src/main/resources/app_form.fxml" afterDir="false" />
     </list>
@@ -460,7 +461,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635083320904</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Умеем создавать папки, в процессе создается таблица загрузок">
+      <created>1635102702133</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1635102702133</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -491,7 +499,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Lesson 2. Nio" />
     <MESSAGE value="1) проблема с передачей большого файла. &#10;- буфер (если завернуть в него байтовый массив) должен потреблять кучу памяти&#10;- рандом аксесс тоже не удобен. всё равно память потребим но частями при вычитывании файла и всё равно ограничение в INTEGER_MAXVAlue для размера файла отстанется.&#10;2) разбираюсь с передачей объекта через сеть по нетти, выдаёт nullpointer exception" />
     <MESSAGE value="исправлены ошибки, теперь файл передаётся на сервер" />
     <MESSAGE value="проблема передачи больших файлов решена, но потрачена куча памяти... Решение требует доработки." />
@@ -516,7 +523,8 @@
     <MESSAGE value="Делейт мод работает , но папки пока удаляются плохо, продумать этто, также надо изменить интерфейс и пора начать заниматься синхронизацией." />
     <MESSAGE value="Похоже что мод удаления работает, дальше тестить не буду, время поджимает уже" />
     <MESSAGE value="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно." />
-    <option name="LAST_COMMIT_MESSAGE" value="Теперь при нажатии на крестик или нажатие кнопки закрыть приложение программа завершает работу корректно." />
+    <MESSAGE value="Умеем создавать папки, в процессе создается таблица загрузок" />
+    <option name="LAST_COMMIT_MESSAGE" value="Умеем создавать папки, в процессе создается таблица загрузок" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
